@@ -34,7 +34,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }}
+        run: docker build --tag registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }} .
 
       - name: Push the Docker image to the Docker registry
-        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/nodejs-app:${{ github.sha }}
+        run: docker push registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }}
