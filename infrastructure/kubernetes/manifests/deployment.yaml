@@ -17,11 +17,9 @@ spec:
     spec:
       containers:
       - name: terpcatalog
-        image: digitalocean.com/tiny-tunnel-registry/terpcatalog:$IMAGE_TAG
+        image: registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:$IMAGE_TAG
         ports:
         - containerPort: 8000
         env:
         - name: PORT
           value: "8000"
-      imagePullSecrets:
-        - name: tiny-tunnel-registry
