@@ -16,10 +16,10 @@ spec:
         app: terpcatalog
     spec:
       containers:
-      - name: terpcatalog
-        image: registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:$IMAGE_TAG
-        ports:
-        - containerPort: 8000
-        env:
-        - name: PORT
-          value: "8000"
+        - name: terpcatalog
+          image: registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:$IMAGE_TAG
+          ports:
+            - containerPort: 8000
+          env:
+            - name: PORT
+              value: "8000"

@@ -7,10 +7,10 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: terpcatalog.campbel.io
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: terpcatalog
-          servicePort: 80
+    - host: terpcatalog.campbel.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: terpcatalog
+              servicePort: 80

@@ -6,15 +6,17 @@ on:
 
 jobs:
 
-  # lint-manifests:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: Lint the Kubernetes deployment manifest
-  #       run: kubectl apply --dry-run=client -f infrastructure/kubernetes/manifests/ --validate=true
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint the Kubernetes deployment manifest
+        run: |
+          apt-get update && apt-get install -y yamllint
+          yamllint .
 
   build:
     runs-on: ubuntu-latest
+    environment: production
     steps:
       - uses: actions/checkout@v3
       - name: Docker Login
