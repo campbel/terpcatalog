@@ -21,6 +21,9 @@ func NewServer(port string) *http.Server {
 
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.FS(fsys)))
+	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("hello"))
+	})
 
 	return &http.Server{
 		Addr:    ":" + port,

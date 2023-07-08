@@ -65,6 +65,7 @@ tasks:
       - setup_admin_npm
     dir: admin/app
     sources:
+      - index.html
       - src/**/*
     generates:
       - dist
