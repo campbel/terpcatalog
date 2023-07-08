@@ -17,16 +17,11 @@ jobs:
           password: ${{ secrets.DOCKER_REG_PASSWORD }}
       - name: Build the Docker image
         run: docker build --tag registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }} .
-
-  push:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
       - name: Push the Docker image to the Docker registry
         run: docker push registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }}
   
   deploy:
-    needs: push
+    needs: build
     runs-on: ubuntu-latest
     environment: production
 
