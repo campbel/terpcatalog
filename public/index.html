@@ -8,19 +8,36 @@
 </head>
 <body>
     <div id="app">
-        <h1>Terpy Day</h1>
+        <img src="assets/ts-icon.png"/ style="margin:0,auto">
+        <h1>Terp Scout™</h1>
         <ul>
             <li v-for="producer in catalog.producers">
                 {{ producer.name }}
                 <ul>
-                    <li v-for="product in producer.products">
-                        {{ product.name }}
-                        {{ product.price }}
-                        {{ product.type }}
+                    <li v-for="strain in producer.strain">
+                        <div class="listing">
+                            <h4>{{ strain.name }}</h4>
+                            <p>{{ strain.genetics }}</p>
+                            <p>{{ strain.category }}</p>
+                            <img v-bind:src="'/assets/' + strain.id + '.jpg'" style="width:400px"/>
+                            <video width="400" height="600" controls>
+                                <source src="assets/grape-boba.mov" type="video/mp4">
+                              </video>
+                            <ul>
+                                <li>Harvest Date:{{ strain.harvest_date }}</li>
+                                <li>THC: 33.00%</li>
+                                <li>Terpenes: {{ strain.terpenes}} </li>
+                                <li>Price: {{ strain.price }}</li>
+                            </ul>
+                            <button>
+                                Add to cart
+                            </button>
+                            </div>
                     </li>
                 </ul>
             </li>
         </ul>
     </div>
+    
     <script src="js/app.js"></script>
 </html>

@@ -1,26 +1,26 @@
 producers:
-  - id: "farm1"
-    name: "Farm 1"
-    location: "1234 Main St, San Diego, CA 92101"
-    website: "farm1.com"
-    phone: "555-555-5555"
-    email: "farmers@farm1.com"
-    products:
-      - id: ""
-        name: "Sativa 100"
-        type: "Sativa"
-        genetics: ""
-        thc: 25.0
-        terps: 12.0
-      - id: ""
-        name: "Scotss Bush"
-        type: "Hybrid"
-        genetics: "123"
-        thc: 25.1
-        terps: 1.4
-      - id: ""
+  - id: "LVC"
+    name: "Louis Vuchron"
+    location: "Portland"
+    website: "https://louisvuchron.com/"
+    contact: "Mark"
+    phone: "(206) 724-3377"
+    email: "info@LouisVuChron.com"
+    strain:
+      - id: "mittencakebatter"
         name: "Mitten Cake Batter"
-        type: "Indica"
-        genetics: ""
-        thc: 22.0
-        terps: 12.0
+        category: "Sativa"
+        genetics: "Triangle Mints x Kush Mints"
+        thc: 25.00%
+        terpenes: 3.00%
+        harvest_date: "6/15/23"
+        price: $1400
+      - id: "lilacdiamonds"
+        name: "Mitten Cake Batter"
+        category: "Sativa"
+        genetics: "Triangle Mints x Kush Mints"
+        thc: 25.00%
+        terpenes: 3.00%
+        harvest_date: "6/15/23"
+        price: $1400
+
