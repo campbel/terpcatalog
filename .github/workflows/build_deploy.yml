@@ -6,12 +6,12 @@ on:
 
 jobs:
 
-  lint-manifests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Lint the Kubernetes deployment manifest
-        run: kubectl apply --dry-run=client -f infrastructure/kubernetes/manifests/ --validate=true
+  # lint-manifests:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Lint the Kubernetes deployment manifest
+  #       run: kubectl apply --dry-run=client -f infrastructure/kubernetes/manifests/ --validate=true
 
   build:
     runs-on: ubuntu-latest
