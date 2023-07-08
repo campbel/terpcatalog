@@ -49,7 +49,7 @@ tasks:
     dir: admin/app
     cmds:
       - npm run dev
-  
+
   admin-test:
     desc: "Run the admin tests"
     deps:
@@ -58,3 +58,10 @@ tasks:
     cmds:
       - npm run test:unit
     
+  admin-build:
+    desc: "Build the admin application"
+    deps:
+      - setup_admin_npm
+    dir: admin/app
+    cmds:
+      - npm run build

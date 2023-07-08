@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/campbel/terpcatalog/admin"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"gopkg.in/yaml.v3"
@@ -23,7 +24,6 @@ var (
 )
 
 func main() {
-	log.Info("starting server...", "port", config.Port())
 	fsys, err := fs.Sub(public, "public")
 	if err != nil {
 		log.FatalError("error during fs.Sub", err)
@@ -53,8 +53,18 @@ func main() {
 	}()
 
 	go func() {
+		log.Info("starting catalog server...", "port", config.Port())
 		if err := http.ListenAndServe(":"+config.Port(), nil); err != nil {
 			log.FatalError("error during http.ListenAndServe", err)
+		}
+		done <- true
+	}()
+
+	go func() {
+		log.Info("starting admin server...", "port", config.AdminPort())
+		adminServer := admin.NewServer(config.AdminPort())
+		if err := adminServer.ListenAndServe(); err != nil {
+			log.FatalError("error during adminServer.ListenAndServe", err)
 		}
 		done <- true
 	}()
