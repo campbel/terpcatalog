@@ -1,0 +1,23 @@
+# https://taskfile.dev
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task -l
+  
+  setup:
+    desc: "Install dependencies"
+    cmds:
+      - brew install go
+
+  run:
+    desc: "Run the application"
+    aliases: ["r", "serve"]
+    interactive: true
+    sources:
+      - "**/*.go"
+      - public/**
+    cmds:
+      - go run main.go
