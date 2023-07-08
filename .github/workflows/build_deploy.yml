@@ -35,7 +35,8 @@ jobs:
           name: deploy.yaml
           path: infrastructure/kubernetes/deploy.yaml
 
+      - name: Set kubeconfig file
+        run: echo "${{ secrets.KUBE_CONFIG }}" > ./config
+
       - name: Deploy to Kubernetes
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
-        run: kubectl apply -f infrastructure/kubernetes/deploy.yaml
+        run: kubectl --kubeconfig ./config apply -f infrastructure/kubernetes/deploy.yaml
