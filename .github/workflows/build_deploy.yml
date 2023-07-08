@@ -26,17 +26,16 @@ jobs:
         run: docker push registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }}
 
       - name: Compile the Kubernetes deployment manifest
-        run: |
-          export IMAGE_TAG=${{ github.sha }}
-          cat infrastructure/kubernetes/manifests/* | envsubst | tee infrastructure/kubernetes/deploy.yaml
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: cat infrastructure/kubernetes/manifests/* | envsubst | tee infrastructure/kubernetes/deploy.yaml
 
       - uses: actions/upload-artifact@v3
         with:
           name: deploy.yaml
           path: infrastructure/kubernetes/deploy.yaml
 
-      - uses: actions-hub/kubectl@master
+      - name: Deploy to Kubernetes
         env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
-        with:
-          args: apply -f infrastructure/kubernetes/deploy.yaml
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG }}
+        run: kubectl apply -f infrastructure/kubernetes/deploy.yaml
