@@ -37,6 +37,7 @@ tasks:
 
   run:
     desc: "Run the application"
+    interactive: true
     deps:
       - setup_air
     cmds:

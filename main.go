@@ -48,14 +48,15 @@ func main() {
 	done := make(chan bool, 1)
 
 	go func() {
-		<-sigs
+		signal := <-sigs
+		log.Info("termination signal received", "signal", signal)
 		done <- true
 	}()
 
 	go func() {
 		log.Info("starting catalog server...", "port", config.Port())
 		if err := http.ListenAndServe(":"+config.Port(), nil); err != nil {
-			log.FatalError("error during http.ListenAndServe", err)
+			log.Error("error during http.ListenAndServe", err)
 		}
 		done <- true
 	}()
@@ -64,7 +65,7 @@ func main() {
 		log.Info("starting admin server...", "port", config.AdminPort())
 		adminServer := admin.NewServer(config.AdminPort())
 		if err := adminServer.ListenAndServe(); err != nil {
-			log.FatalError("error during adminServer.ListenAndServe", err)
+			log.Error("error during adminServer.ListenAndServe", err)
 		}
 		done <- true
 	}()
