@@ -33,7 +33,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    environment: production
+    environment: 
+      name: production
+      url: https://terpcatalog.campbel.io
 
     steps:
       - uses: actions/checkout@v3
