@@ -25,12 +25,16 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Docker Login
+        uses: docker/login-action@v1
+        with:
+          registry: registry.digitalocean.com
+          username: ${{ secrets.DOCKER_REG_USERNAME }}
+          password: ${{ secrets.DOCKER_REG_PASSWORD }}
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # Runs a single command using the runners shell
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:${{ github.sha }}
+
+      - name: Push the Docker image to the Docker registry
+        run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/nodejs-app:${{ github.sha }}
