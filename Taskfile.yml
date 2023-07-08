@@ -9,6 +9,7 @@ tasks:
   
   setup:
     desc: "Install dependencies"
+    internal: true
     cmds:
       - task: setup_go
       - task: setup_air
@@ -29,6 +30,7 @@ tasks:
 
   setup_admin_npm:
     desc: "Install admin dependencies"
+    internal: true
     dir: admin/app
     cmds:
       - npm install
