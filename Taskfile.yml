@@ -27,9 +27,32 @@ tasks:
     cmds:
       - command -v air || go install github.com/cosmtrek/air@latest
 
+  setup_admin_npm:
+    desc: "Install admin dependencies"
+    dir: admin/app
+    cmds:
+      - npm install
+
   run:
     desc: "Run the application"
     deps:
       - setup_air
     cmds:
       - air
+
+  admin-run:
+    desc: "Run the admin application"
+    deps:
+      - setup_admin_npm
+    dir: admin/app
+    cmds:
+      - npm run dev
+  
+  admin-test:
+    desc: "Run the admin tests"
+    deps:
+      - setup_admin_npm
+    dir: admin/app
+    cmds:
+      - npm run test:unit
+    
