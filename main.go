@@ -3,7 +3,6 @@ package main
 import (
 	"embed"
 	"encoding/json"
-	"fmt"
 	"io/fs"
 	"net/http"
 	"os"
@@ -35,8 +34,6 @@ func main() {
 	if err := yaml.Unmarshal([]byte(catalogYaml), &catalog); err != nil {
 		log.FatalError("error during yaml.Unmarshal", err)
 	}
-
-	fmt.Println(catalog)
 
 	http.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
