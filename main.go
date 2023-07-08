@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"encoding/json"
 	"io/fs"
@@ -43,33 +44,28 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.FS(fsys)))
 
+	catalogServer := &http.Server{
+		Addr: ":" + config.Port(),
+	}
+	go startServer("catalog", catalogServer)
+
+	adminServer := admin.NewServer(config.AdminPort())
+	go startServer("admin", adminServer)
+
+	ctx := context.Background()
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	done := make(chan bool, 1)
-
-	go func() {
-		signal := <-sigs
-		log.Info("termination signal received", "signal", signal)
-		done <- true
-	}()
-
-	go func() {
-		log.Info("starting catalog server...", "port", config.Port())
-		if err := http.ListenAndServe(":"+config.Port(), nil); err != nil {
-			log.Error("error during http.ListenAndServe", err)
-		}
-		done <- true
-	}()
-
-	go func() {
-		log.Info("starting admin server...", "port", config.AdminPort())
-		adminServer := admin.NewServer(config.AdminPort())
-		if err := adminServer.ListenAndServe(); err != nil {
-			log.Error("error during adminServer.ListenAndServe", err)
-		}
-		done <- true
-	}()
-
-	<-done
+	<-sigs
+	catalogServer.Shutdown(ctx)
+	adminServer.Shutdown(ctx)
 	log.Info("shutting down...")
+}
+
+func startServer(name string, server *http.Server) {
+	log.Info("starting server...", "name", name, "addr", server.Addr)
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Error("error during http.ListenAndServe", err)
+	} else {
+		log.Info("server stopped", "name", name)
+	}
 }

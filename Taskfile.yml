@@ -64,5 +64,9 @@ tasks:
     deps:
       - setup_admin_npm
     dir: admin/app
+    sources:
+      - src/**/*
+    generates:
+      - dist
     cmds:
       - npm run build
