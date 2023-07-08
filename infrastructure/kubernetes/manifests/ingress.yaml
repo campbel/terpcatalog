@@ -7,6 +7,10 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - terpcatalog.campbel.io
+      secretName: terpcatalog
   rules:
     - host: terpcatalog.campbel.io
       http:
