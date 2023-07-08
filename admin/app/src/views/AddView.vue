@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import axios from 'axios';
 
 const categories = ref([
   "Indica",
@@ -17,14 +18,29 @@ const newStrain = ref({
 })
 
 function onSubmit() {
-  
+  axios.post("/api/strains", newStrain.value)
+    .then((response) => {
+      console.log(response);
+      newStrain.value = {
+        "name": "",
+        "category": "",
+        "genetics": "",
+        "thc": 0,
+        "terpenes": 0,
+        "price": 0,
+        "harvest_date": "",
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
 </script>
 
 <template>
   <main>
-    <h1 class="text-3xl space-y-1 font-bold leading-tight text-gray-700">
+    <h1 class="text-3xl space-y-1 font-bold leading-tight text-gray-700 mb-3">
       Add a Strain
     </h1>
     <form @submit.prevent="onSubmit" class="w-full max-w-lg">
@@ -33,7 +49,7 @@ function onSubmit() {
       <div class="flex flex-wrap -mx-3 mb-3">
 
         <!-- Name -->
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-name">
             Name
           </label>
@@ -41,12 +57,12 @@ function onSubmit() {
         </div>
 
         <!-- Category -->
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-state">
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-category">
             Category
           </label>
           <div class="relative">
-            <select v-model="newStrain.category" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+            <select v-model="newStrain.category" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-category">
               <option v-for="option in categories" :key="option" :value="option">
                 {{ option }}
               </option>
@@ -61,53 +77,66 @@ function onSubmit() {
   
       <!-- Row 2-->
       <div class="flex flex-wrap -mx-3 mb-3">
-        <div class="w-full px-3">
+
+        <div class="w-full md:w px-3 mb-3 md:mb-0">
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-genetics">
             Genetics
           </label>
           <textarea v-model="newStrain.genetics" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-genetics"></textarea>
-          <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
         </div>
+
       </div>
 
       <!-- Row 3-->
       <div class="flex flex-wrap -mx-3 mb-3">
 
         <!-- THC -->
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-thc">
             THC% (0-100)
           </label>
-          <input v-model.number="newStrain.thc" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="number" placeholder="25.0">
+          <input v-model.number="newStrain.thc" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-thc" type="number" placeholder="25.0">
         </div>
 
         <!-- Terpenes -->
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-terpenes">
             Terpenes (0-100)
           </label>
-          <input v-model.number="newStrain.terpenes" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="number" placeholder="25.0">
+          <input v-model.number="newStrain.terpenes" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-terpenes" type="number" placeholder="25.0">
         </div>
 
       </div>
 
       <!-- Row 4-->
-      <div class="flex flex-wrap -mx-3 mb-3">
+      <div class="flex flex-wrap -mx-3 mb-6">
 
         <!-- Price -->
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-price">
             Price (USD)
           </label>
-          <input v-model.number="newStrain.price" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="number" placeholder="25.0">
+          <input v-model.number="newStrain.price" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-price" type="number" placeholder="25.0">
         </div>
 
         <!-- Harvest Date -->
-        <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+          <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-harvest-date">
             Harvest Date
           </label>
-          <input v-model="newStrain.harvest_date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="date" placeholder="25.0">
+          <input v-model="newStrain.harvest_date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-harvest-date" type="date" placeholder="25.0">
+        </div>
+
+      </div>
+
+      <!-- Row 5 -->
+      <div class="flex flex-wrap -mx-3 mb-3">
+
+        <!-- Submit -->
+        <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+          <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+            Submit
+          </button>
         </div>
 
       </div>
