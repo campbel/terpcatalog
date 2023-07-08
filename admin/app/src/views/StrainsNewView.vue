@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const categories = ref([
   "Indica",
@@ -20,16 +23,8 @@ const newStrain = ref({
 function onSubmit() {
   axios.post("/api/strains", newStrain.value)
     .then((response) => {
-      console.log(response);
-      newStrain.value = {
-        "name": "",
-        "category": "",
-        "genetics": "",
-        "thc": 0,
-        "terpenes": 0,
-        "price": 0,
-        "harvest_date": "",
-      }
+      // route to the strain list
+      router.push({ name: "strains" });
     })
     .catch((error) => {
       console.log(error);
@@ -53,7 +48,8 @@ function onSubmit() {
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-name">
             Name
           </label>
-          <input v-model="newStrain.name" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="grid-name" type="text" placeholder="Green Blaze">
+          <input v-model="newStrain.name" id="grid-name" type="text" placeholder="Green Blaze" required
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
         </div>
 
         <!-- Category -->
@@ -62,7 +58,8 @@ function onSubmit() {
             Category
           </label>
           <div class="relative">
-            <select v-model="newStrain.category" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-category">
+            <select v-model="newStrain.category" id="grid-category" required
+              class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
               <option v-for="option in categories" :key="option" :value="option">
                 {{ option }}
               </option>
@@ -82,7 +79,8 @@ function onSubmit() {
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-genetics">
             Genetics
           </label>
-          <textarea v-model="newStrain.genetics" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-genetics"></textarea>
+          <textarea v-model="newStrain.genetics" id="grid-genetics" required
+           class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"></textarea>
         </div>
 
       </div>
@@ -95,7 +93,8 @@ function onSubmit() {
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-thc">
             THC% (0-100)
           </label>
-          <input v-model.number="newStrain.thc" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-thc" type="number" placeholder="25.0">
+          <input v-model.number="newStrain.thc" id="grid-thc" type="number" placeholder="25.0" required min="0" max="100"
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
         </div>
 
         <!-- Terpenes -->
@@ -103,7 +102,8 @@ function onSubmit() {
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-terpenes">
             Terpenes (0-100)
           </label>
-          <input v-model.number="newStrain.terpenes" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-terpenes" type="number" placeholder="25.0">
+          <input v-model.number="newStrain.terpenes" id="grid-terpenes" type="number" placeholder="25.0" required min="0" max="100"
+           class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
         </div>
 
       </div>
@@ -116,7 +116,8 @@ function onSubmit() {
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-price">
             Price (USD)
           </label>
-          <input v-model.number="newStrain.price" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-price" type="number" placeholder="25.0">
+          <input v-model.number="newStrain.price" id="grid-price" type="number" placeholder="25.0" required min="0"
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
         </div>
 
         <!-- Harvest Date -->
@@ -124,7 +125,8 @@ function onSubmit() {
           <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-harvest-date">
             Harvest Date
           </label>
-          <input v-model="newStrain.harvest_date" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-harvest-date" type="date" placeholder="25.0">
+          <input v-model="newStrain.harvest_date" id="grid-harvest-date" type="date" placeholder="25.0" required 
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
         </div>
 
       </div>
