@@ -1,0 +1,23 @@
+producers:
+  - id: "farm1"
+    name: "Farm 1"
+    location: "1234 Main St, San Diego, CA 92101"
+    website: "farm1.com"
+    phone: "555-555-5555"
+    email: "farmers@farm1.com"
+    products:
+      - id: ""
+        name: ""
+        type: "Sativa"
+        thc: 0.0
+        terps: 0.0
+      - id: ""
+        name: ""
+        type: "Sativa"
+        thc: 0.0
+        terps: 0.0
+      - id: ""
+        name: ""
+        type: "Sativa"
+        thc: 0.0
+        terps: 0.0

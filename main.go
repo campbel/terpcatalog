@@ -2,18 +2,27 @@ package main
 
 import (
 	"embed"
+	"encoding/json"
+	"fmt"
 	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/campbel/terpcatalog/types"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
+	"gopkg.in/yaml.v3"
 )
 
-//go:embed public
-var public embed.FS
+var (
+	//go:embed public
+	public embed.FS
+
+	//go:embed data/catalog.yaml
+	catalogYaml string
+)
 
 func main() {
 	log.Info("starting server...", "port", config.Port())
@@ -21,6 +30,20 @@ func main() {
 	if err != nil {
 		log.FatalError("error during fs.Sub", err)
 	}
+
+	var catalog types.Catalog
+	if err := yaml.Unmarshal([]byte(catalogYaml), &catalog); err != nil {
+		log.FatalError("error during yaml.Unmarshal", err)
+	}
+
+	fmt.Println(catalog)
+
+	http.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(w).Encode(catalog); err != nil {
+			log.Error("error during json.Encode", err)
+		}
+	}))
 
 	http.Handle("/", http.FileServer(http.FS(fsys)))
 
