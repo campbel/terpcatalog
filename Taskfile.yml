@@ -10,14 +10,26 @@ tasks:
   setup:
     desc: "Install dependencies"
     cmds:
-      - brew install go
+      - task: setup_go
+      - task: setup_air
+
+  setup_go:
+    desc: "Install go"
+    internal: true
+    cmds:
+      - command -v go || brew install go
+
+  setup_air:
+    desc: "Install air"
+    internal: true
+    deps: 
+      - setup_go
+    cmds:
+      - command -v air || go install github.com/cosmtrek/air@latest
 
   run:
     desc: "Run the application"
-    aliases: ["r", "serve"]
-    interactive: true
-    sources:
-      - "**/*.go"
-      - public/**
+    deps:
+      - setup_air
     cmds:
-      - go run main.go
+      - air
