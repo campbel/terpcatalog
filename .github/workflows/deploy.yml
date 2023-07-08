@@ -1,6 +1,6 @@
 name: deploy
 on:
-  deployment:
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -11,6 +11,10 @@ jobs:
         run: |
           export IMAGE_TAG=${{ github.sha }}
           cat infrastructure/kubernetes/manifests/* | envsubst | tee infrastructure/kubernetes/deploy.yaml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: deploy.yaml
+          path: infrastructure/kubernetes/deploy.yaml
       - uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
