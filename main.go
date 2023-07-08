@@ -9,7 +9,6 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/campbel/terpcatalog/types"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"gopkg.in/yaml.v3"
@@ -30,7 +29,7 @@ func main() {
 		log.FatalError("error during fs.Sub", err)
 	}
 
-	var catalog types.Catalog
+	var catalog any
 	if err := yaml.Unmarshal([]byte(catalogYaml), &catalog); err != nil {
 		log.FatalError("error during yaml.Unmarshal", err)
 	}

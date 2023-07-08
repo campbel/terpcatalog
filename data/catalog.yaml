@@ -7,17 +7,20 @@ producers:
     email: "farmers@farm1.com"
     products:
       - id: ""
-        name: ""
+        name: "Sativa 100"
         type: "Sativa"
-        thc: 0.0
-        terps: 0.0
+        genetics: ""
+        thc: 25.0
+        terps: 12.0
       - id: ""
-        name: ""
-        type: "Sativa"
-        thc: 0.0
-        terps: 0.0
+        name: "Scotss Bush"
+        type: "Hybrid"
+        genetics: "123"
+        thc: 25.1
+        terps: 1.4
       - id: ""
-        name: ""
-        type: "Sativa"
-        thc: 0.0
-        terps: 0.0
+        name: "Mitten Cake Batter"
+        type: "Indica"
+        genetics: ""
+        thc: 22.0
+        terps: 12.0

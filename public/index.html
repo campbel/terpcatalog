@@ -10,13 +10,13 @@
     <div id="app">
         <h1>Terpy Day</h1>
         <ul>
-            <li v-for="producer in catalog.Producers">
-                {{ producer.Name }}
+            <li v-for="producer in catalog.producers">
+                {{ producer.name }}
                 <ul>
-                    <li v-for="product in producer.Products">
-                        {{ product.Name }}
-                        {{ product.Price }}
-                        {{ product.Type }}
+                    <li v-for="product in producer.products">
+                        {{ product.name }}
+                        {{ product.price }}
+                        {{ product.type }}
                     </li>
                 </ul>
             </li>
