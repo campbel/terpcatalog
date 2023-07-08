@@ -1,0 +1,25 @@
+---
+apiversion: apps/v1
+kind: Deployment
+metadata:
+  name: 
+  labels:
+    app: terpcatalog
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: terpcatalog
+  template:
+    metadata:
+      labels:
+        app: terpcatalog
+    spec:
+      containers:
+      - name: terpcatalog
+        image: digitalocean.com/terpcatalog:$IMAGE_TAG
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PORT
+          value: 8000
