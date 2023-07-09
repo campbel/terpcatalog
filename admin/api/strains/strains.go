@@ -58,5 +58,4 @@ func (h *Handler) handleDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	strains = append(strains[:id], strains[id+1:]...)
-	w.WriteHeader(http.StatusNotFound)
 }

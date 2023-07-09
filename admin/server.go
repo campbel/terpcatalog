@@ -28,14 +28,11 @@ func NewServer(port string) *http.Server {
 		log.FatalError("error during fs.Sub", err)
 	}
 
-	// Admin API
-	handler := api.NewHandler()
-
 	mux := http.NewServeMux()
 	mux.Handle("/", fileHandler("text/html", index))
 	mux.Handle("/favicon.ico", fileHandler("image/x-icon", favicon))
 	mux.Handle("/assets/", http.FileServer(http.FS(assetFS)))
-	mux.Handle("/api/", handler)
+	mux.Handle("/api/", api.NewHandler())
 
 	return &http.Server{
 		Addr:    ":" + port,
