@@ -35,9 +35,11 @@ tasks:
     cmds:
       - npm install
 
+  run:
+    deps: ["server", "admin"]
+
   server:
     desc: "Run the application"
-    aliases: ["run"]
     interactive: true
     deps:
       - setup_air
