@@ -54,7 +54,7 @@ function removeImage(index: number) {
 <template>
   <main>
     <div class="w-full">
-      <div class="bg-white max-w-lg mx-auto shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="bg-white max-w-lg mx-auto shadow-md rounded-xl border border-gray-200or px-8 pt-6 pb-8 mb-4">
 
         <h1 class="text-3xl space-y-1 font-bold leading-tight text-gray-700 mb-3">
           Add a Strain
