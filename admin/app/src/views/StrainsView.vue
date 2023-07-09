@@ -4,6 +4,7 @@ import axios from 'axios'
 import moment from 'moment'
 
 class Strain {
+  id: string = ''
   name: string = ''
   category: string = ''
   genetics: string = ''
@@ -41,7 +42,7 @@ function loadStrains() {
     })
 }
 
-function deleteStrain(id: number) {
+function deleteStrain(id: string) {
   axios.delete(`/api/strains?id=${id}`)
     .then((response) => {
       console.log(response.data)
@@ -83,7 +84,7 @@ function deleteStrain(id: number) {
         <td class="text-gray-700 p-3">${{ strain.price }}</td>
         <td class="text-gray-700 p-3">{{ formatDate(strain.harvest_date) }}</td>
         <td class="text-red-400 text-right p-3">
-          <button @click="deleteStrain(index)" class="border px-2 rounded-xl border-red-400 hover:bg-red-400 hover:text-white">delete</button>
+          <button @click="deleteStrain(strain.id)" class="border px-2 rounded-xl border-red-400 hover:bg-red-400 hover:text-white">delete</button>
         </td>
       </tr>
     </tbody>

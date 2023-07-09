@@ -3,16 +3,18 @@ package strains
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
 
+	"github.com/campbel/terpcatalog/admin/db/strains"
+	"github.com/campbel/terpcatalog/admin/types"
 	"github.com/campbel/terpcatalog/util/log"
 )
 
 type Handler struct {
+	store strains.Store
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(store strains.Store) *Handler {
+	return &Handler{store}
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -29,11 +31,27 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-var strains []any
-
 func (h *Handler) handleGet(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	err := json.NewEncoder(w).Encode(strains)
+	id := r.URL.Query().Get("id")
+	if id != "" {
+		strain, err := h.store.GetStrain(r.Context(), id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		err = json.NewEncoder(w).Encode([]types.Strain{strain})
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		return
+	}
+	strains, err := h.store.GetStrains(r.Context())
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	err = json.NewEncoder(w).Encode(strains)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -41,21 +59,34 @@ func (h *Handler) handleGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
-	var data any
+	var data types.Strain
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	strains = append(strains, data)
+	strain, err := h.store.CreateStrain(r.Context(), data)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	w.WriteHeader(http.StatusCreated)
+	err = json.NewEncoder(w).Encode(strain)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func (h *Handler) handleDelete(w http.ResponseWriter, r *http.Request) {
-	idString := r.URL.Query().Get("id")
-	id, err := strconv.Atoi(idString)
-	if err != nil {
+	id := r.URL.Query().Get("id")
+	if id == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	strains = append(strains[:id], strains[id+1:]...)
+	err := h.store.DeleteStrain(r.Context(), id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }

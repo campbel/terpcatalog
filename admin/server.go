@@ -1,12 +1,16 @@
 package admin
 
 import (
+	"context"
 	"embed"
 	"io/fs"
 	"net/http"
 
 	"github.com/campbel/terpcatalog/admin/api"
+	"github.com/campbel/terpcatalog/admin/db/strains"
 	"github.com/campbel/terpcatalog/util/log"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
@@ -20,7 +24,7 @@ var (
 	assets embed.FS
 )
 
-func NewServer(port string) *http.Server {
+func NewServer(ctx context.Context, port string) *http.Server {
 
 	// Admin App Assets
 	assetFS, err := fs.Sub(assets, "app/dist")
@@ -28,11 +32,24 @@ func NewServer(port string) *http.Server {
 		log.FatalError("error during fs.Sub", err)
 	}
 
+	// Mongo Store
+	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
+	client, err := mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	strainsCollection := client.Database("terpcatalog").Collection("strains")
+	strainsStore := strains.NewStore(strainsCollection)
+
 	mux := http.NewServeMux()
 	mux.Handle("/", fileHandler("text/html", index))
 	mux.Handle("/favicon.ico", fileHandler("image/x-icon", favicon))
 	mux.Handle("/assets/", http.FileServer(http.FS(assetFS)))
-	mux.Handle("/api/", api.NewHandler())
+	mux.Handle("/api/", api.NewHandler(strainsStore))
 
 	return &http.Server{
 		Addr:    ":" + port,

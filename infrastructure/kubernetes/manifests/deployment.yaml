@@ -26,3 +26,8 @@ spec:
               value: "8000"
             - name: ADMIN_PORT
               value: "8001"
+            - name: MONGO_CONNECTION_STRING
+              from:
+                secretKeyRef:
+                  name: mongodb
+                  key: connection_string

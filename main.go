@@ -25,6 +25,8 @@ var (
 )
 
 func main() {
+	ctx := context.Background()
+
 	fsys, err := fs.Sub(public, "public")
 	if err != nil {
 		log.FatalError("error during fs.Sub", err)
@@ -49,10 +51,9 @@ func main() {
 	}
 	go startServer("catalog", catalogServer)
 
-	adminServer := admin.NewServer(config.AdminPort())
+	adminServer := admin.NewServer(ctx, config.AdminPort())
 	go startServer("admin", adminServer)
 
-	ctx := context.Background()
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	<-sigs
