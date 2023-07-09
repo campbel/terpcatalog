@@ -8,7 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-.DS_Storexw
+.DS_Store
+# dist
 dist-ssr
 coverage
 *.local
