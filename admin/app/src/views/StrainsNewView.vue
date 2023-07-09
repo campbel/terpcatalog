@@ -10,6 +10,8 @@ const categories = ref([
   "Sativa",
   "Hybrid",
 ])
+
+const images: [] = []
 const newStrain = ref({
   "name": "",
   "category": "",
@@ -18,12 +20,12 @@ const newStrain = ref({
   "terpenes": 0,
   "price": 0,
   "harvest_date": "",
+  "images": new Array<string>(),
 })
 
 function onSubmit() {
   axios.post("/api/strains", newStrain.value)
     .then((response) => {
-      // route to the strain list
       router.push({ name: "strains" });
     })
     .catch((error) => {
@@ -31,6 +33,22 @@ function onSubmit() {
     });
 }
 
+function uploadImage(e: any) {
+  if (!e.target || !e.target.files || e.target.files.length == 0) return
+  const image = e.target.files[0];
+  const reader = new FileReader();
+  reader.readAsDataURL(image);
+  reader.onload = e => {
+    if (!e.target) return
+    let image = e.target.result;
+    if (!image) return;
+    if (typeof image === 'string') newStrain.value.images.push(image);
+  };
+}
+
+function removeImage(index: number) {
+  newStrain.value.images.splice(index, 1);
+}
 </script>
 
 <template>
@@ -144,6 +162,38 @@ function onSubmit() {
           <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-200">
 
           <!-- Row 5 -->
+
+          <h2 class="block text-xl space-y-1 font-bold leading-tight text-gray-700 mb-3">Images</h2>
+          <p class="text-sm text-gray-400">Upload images of the product here.</p>
+
+          <div class="flex flex-wrap -mx-3 mb-3">
+
+            <!-- Image -->
+            <div class="w-full px-3 mb-3 md:mb-0">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-price">
+                
+              </label>
+              <input type="file" accept="image/jpeg" id="grid-photo" @change="uploadImage"
+                class="block w-full text-sm p-2 text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+            </div>
+
+          </div>
+
+          <div class="flex flex-wrap -mx-3 mb-3">
+
+            <div v-for="(image, index) in newStrain.images" class="w-full md:w-1/2 px-3 mb-3">
+              <img :src="image" class="rounded shadow-md border-gray-400 border"/>
+              <button @click="removeImage(index)" class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
+                Remove
+              </button>
+            </div>
+
+          </div>
+
+
+          <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-200">
+
+          <!-- Footer -->
           <div class="flex flex-wrap justify-end -mx-3 mb-0">
 
             <!-- Submit -->
@@ -158,6 +208,7 @@ function onSubmit() {
           </div>
 
         </form>
+      </div>
     </div>
-  </div>
-</main></template>
+  </main>
+</template>
