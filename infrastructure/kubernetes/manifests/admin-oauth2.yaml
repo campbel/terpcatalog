@@ -30,7 +30,7 @@ spec:
           value: a48ae341773d01eea1c01bee54d48fdff67d5a23
         # docker run -ti --rm python:3-alpine python -c 'import secrets,base64; print(base64.b64encode(base64.b64encode(secrets.token_bytes(16))));'
         - name: OAUTH2_PROXY_COOKIE_SECRET
-          value: b'ck9peWo2QWIvS28vK1YwVlpqbEtIdz09'
+          value: ck9peWo2QWIvS28vK1YwVlpqbEtIdz09
         image: quay.io/oauth2-proxy/oauth2-proxy:latest
         imagePullPolicy: Always
         name: oauth2-proxy
