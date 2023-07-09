@@ -183,7 +183,7 @@ function removeImage(index: number) {
 
           <div class="flex flex-wrap -mx-3 mb-3">
 
-            <div v-for="(image, index) in newStrain.images" class="md:w-1/2 px-3 mb-3">
+            <div v-for="(image, index) in newStrain.images" class="px-3 mb-3">
               <img :src="image" class="rounded shadow-md border-gray-200 max-h-48 border"/>
               <button type="button" @click="removeImage(index)" class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
                 Remove
