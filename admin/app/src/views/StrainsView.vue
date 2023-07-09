@@ -44,7 +44,7 @@ function formatDate(date: string) {
     Strains
   </h1>
   <p class="text-xs text-gray-400 mb-6">
-    The current strains you have listed as available are below. You can edit or delete them from here.
+    Your current strains are listed below.
   </p>
 
   <table v-if="strains" class="table-auto w-full">
