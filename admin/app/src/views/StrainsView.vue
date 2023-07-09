@@ -62,27 +62,33 @@ function deleteStrain(id: number) {
     Your current strains are listed below.
   </p>
 
-  <table v-if="strains && strains.length > 0" class="table-auto w-full">
-    <thead class="border-b mb-3">
-      <tr>
-        <th v-for="header in tableHeaders" class="text-gray-500 text-left text-xs font-bold uppercase py-2">{{ header }}</th>
+  <div v-if="strains && strains.length > 0"
+      class="relative overflow-x-auto border border-slate-300 sm:rounded-lg">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr class="bg-slate-300">
+        <th v-for="header in tableHeaders" 
+          scope="col" class="p-3">{{ header }}</th>
+        <th></th>
       </tr>
     </thead>
-    <tbody>
-      <tr v-for="(strain, index) in strains" class="border-b mb-3 last:border-b-0">
-        <td class="text-gray-700 text-left py-2">{{ strain.name }}</td>
-        <td class="text-gray-700 text-left py-2">{{ strain.category }}</td>
-        <td class="text-gray-700 text-left py-2">{{ strain.genetics }}</td>
-        <td class="text-gray-700 text-left py-2">{{ strain.thc }}%</td>
-        <td class="text-gray-700 text-left py-2">{{ strain.terpenes }}%</td>
-        <td class="text-gray-700 text-left py-2">${{ strain.price }}</td>
-        <td class="text-gray-700 text-left py-2">{{ formatDate(strain.harvest_date) }}</td>
-        <td class="text-red-400 text-right py-2">
+    <tbody class="bg-white">
+      <tr v-for="(strain, index) in strains"
+        class="bg-white border-b hover:bg-gray-100">
+        <td class="text-gray-700 p-3">{{ strain.name }}</td>
+        <td class="text-gray-700 p-3">{{ strain.category }}</td>
+        <td class="text-gray-700 p-3">{{ strain.genetics }}</td>
+        <td class="text-gray-700 p-3">{{ strain.thc }}%</td>
+        <td class="text-gray-700 p-3">{{ strain.terpenes }}%</td>
+        <td class="text-gray-700 p-3">${{ strain.price }}</td>
+        <td class="text-gray-700 p-3">{{ formatDate(strain.harvest_date) }}</td>
+        <td class="text-red-400 text-right p-3">
           <button @click="deleteStrain(index)" class="border px-2 rounded-xl border-red-400 hover:bg-red-400 hover:text-white">delete</button>
         </td>
       </tr>
     </tbody>
   </table>
+  </div>
   <p v-else class="text-gray-400 text-md">
     We couldn't find any strains.
     <RouterLink to="/strains/new" class="text-blue-700 hover:text-blue-400">Add a Strain</RouterLink> 
