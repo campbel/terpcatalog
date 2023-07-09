@@ -10,14 +10,20 @@ import (
 )
 
 var (
-	//go:embed app/dist
-	dist embed.FS
+	//go:embed app/dist/index.html
+	index []byte
+
+	//go:embed app/dist/favicon.ico
+	favicon []byte
+
+	//go:embed app/dist/assets
+	assets embed.FS
 )
 
 func NewServer(port string) *http.Server {
 
-	// Admin App
-	fsys, err := fs.Sub(dist, "app/dist")
+	// Admin App Assets
+	assetFS, err := fs.Sub(assets, "app/dist")
 	if err != nil {
 		log.FatalError("error during fs.Sub", err)
 	}
@@ -26,13 +32,22 @@ func NewServer(port string) *http.Server {
 	handler := api.NewHandler()
 
 	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(http.FS(fsys)))
+	mux.Handle("/", fileHandler("text/html", index))
+	mux.Handle("/favicon.ico", fileHandler("image/x-icon", favicon))
+	mux.Handle("/assets/", http.FileServer(http.FS(assetFS)))
 	mux.Handle("/api/", handler)
 
 	return &http.Server{
 		Addr:    ":" + port,
 		Handler: logWrapper(mux),
 	}
+}
+
+func fileHandler(contentType string, content []byte) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", contentType)
+		w.Write(content)
+	})
 }
 
 func logWrapper(handler http.Handler) http.Handler {
