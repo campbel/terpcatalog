@@ -9,6 +9,7 @@ tasks:
   
   setup:
     desc: "Install dependencies"
+    internal: true
     cmds:
       - task: setup_go
       - task: setup_air
@@ -27,9 +28,46 @@ tasks:
     cmds:
       - command -v air || go install github.com/cosmtrek/air@latest
 
+  setup_admin_npm:
+    desc: "Install admin dependencies"
+    internal: true
+    dir: admin/app
+    cmds:
+      - npm install
+
   run:
     desc: "Run the application"
+    interactive: true
     deps:
       - setup_air
     cmds:
       - air
+
+  admin-run:
+    desc: "Run the admin application"
+    deps:
+      - setup_admin_npm
+    dir: admin/app
+    cmds:
+      - npm run dev
+
+  admin-test:
+    desc: "Run the admin tests"
+    deps:
+      - setup_admin_npm
+    dir: admin/app
+    cmds:
+      - npm run test:unit
+    
+  admin-build:
+    desc: "Build the admin application"
+    deps:
+      - setup_admin_npm
+    dir: admin/app
+    sources:
+      - index.html
+      - src/**/*
+    generates:
+      - dist
+    cmds:
+      - npm run build

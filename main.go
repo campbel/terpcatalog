@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 	"encoding/json"
 	"io/fs"
@@ -9,6 +10,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/campbel/terpcatalog/admin"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"gopkg.in/yaml.v3"
@@ -23,7 +25,6 @@ var (
 )
 
 func main() {
-	log.Info("starting server...", "port", config.Port())
 	fsys, err := fs.Sub(public, "public")
 	if err != nil {
 		log.FatalError("error during fs.Sub", err)
@@ -43,22 +44,28 @@ func main() {
 
 	http.Handle("/", http.FileServer(http.FS(fsys)))
 
+	catalogServer := &http.Server{
+		Addr: ":" + config.Port(),
+	}
+	go startServer("catalog", catalogServer)
+
+	adminServer := admin.NewServer(config.AdminPort())
+	go startServer("admin", adminServer)
+
+	ctx := context.Background()
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-	done := make(chan bool, 1)
-
-	go func() {
-		<-sigs
-		done <- true
-	}()
-
-	go func() {
-		if err := http.ListenAndServe(":"+config.Port(), nil); err != nil {
-			log.FatalError("error during http.ListenAndServe", err)
-		}
-		done <- true
-	}()
-
-	<-done
+	<-sigs
+	catalogServer.Shutdown(ctx)
+	adminServer.Shutdown(ctx)
 	log.Info("shutting down...")
+}
+
+func startServer(name string, server *http.Server) {
+	log.Info("starting server...", "name", name, "addr", server.Addr)
+	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		log.Error("error during http.ListenAndServe", err)
+	} else {
+		log.Info("server stopped", "name", name)
+	}
 }

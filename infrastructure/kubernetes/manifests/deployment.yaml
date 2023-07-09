@@ -20,6 +20,9 @@ spec:
           image: registry.digitalocean.com/tiny-tunnel-registry/terpcatalog:$IMAGE_TAG
           ports:
             - containerPort: 8000
+            - containerPort: 8001
           env:
             - name: PORT
               value: "8000"
+            - name: ADMIN_PORT
+              value: "8001"

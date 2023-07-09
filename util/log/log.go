@@ -14,14 +14,15 @@ func init() {
 	logger.SetFormatter(log.TextFormatter)
 	logger.SetTimeFormat("15:04:05")
 	logger.SetReportCaller(true)
+	logger.SetCallerOffset(1)
 }
 
 func Info(msg any, keyvals ...any) {
 	logger.Info(msg, keyvals...)
 }
 
-func Error(msg any, keyvals ...any) {
-	logger.Error(msg, keyvals...)
+func Error(msg any, err error, keyvals ...any) {
+	logger.Error(msg, append(keyvals, "error", err.Error())...)
 }
 
 func Fatal(msg any, keyvals ...any) {
