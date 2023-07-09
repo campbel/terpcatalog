@@ -8,6 +8,7 @@ import (
 
 	"github.com/campbel/terpcatalog/admin/api"
 	"github.com/campbel/terpcatalog/admin/db/strains"
+	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -33,7 +34,7 @@ func NewServer(ctx context.Context, port string) *http.Server {
 	}
 
 	// Mongo Store
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/")
+	clientOptions := options.Client().ApplyURI(config.MongoConnectionString())
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
 		log.Fatal(err)
