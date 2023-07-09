@@ -8,8 +8,10 @@
 </head>
 <body>
     <div id="app">
-        <img src="assets/ts-icon.png"/ style="margin:0,auto">
-        <h1>Terp Scout™</h1>
+        <div id="logocontainer">
+            <img class="logo" src="assets/ts-icon.png"/ style="margin:0,auto">
+        </div>
+        <h1 style="text-align:center">Terp Scout™</h1>
         <ul>
             <li v-for="producer in catalog.producers">
                 {{ producer.name }}
