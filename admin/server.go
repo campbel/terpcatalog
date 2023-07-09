@@ -67,7 +67,7 @@ func fileHandler(contentType string, content []byte) http.Handler {
 
 func logWrapper(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Info("request", "method", r.Method, "path", r.URL.Path, "email", r.Header.Get("X-Auth-Request-Email"))
+		log.Info("request", "method", r.Method, "path", r.URL.Path, "headers", r.Header)
 		handler.ServeHTTP(w, r)
 	})
 }
