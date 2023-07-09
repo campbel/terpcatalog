@@ -62,7 +62,7 @@ function deleteStrain(id: number) {
     Your current strains are listed below.
   </p>
 
-  <table v-if="strains" class="table-auto w-full">
+  <table v-if="strains && strains.length > 0" class="table-auto w-full">
     <thead class="border-b mb-3">
       <tr>
         <th v-for="header in tableHeaders" class="text-gray-500 text-left text-xs font-bold uppercase py-2">{{ header }}</th>
@@ -83,7 +83,11 @@ function deleteStrain(id: number) {
       </tr>
     </tbody>
   </table>
-  <p v-else class="text-gray-400 text-sm">No strains found.</p>
+  <p v-else class="text-gray-400 text-md">
+    We couldn't find any strains.
+    <RouterLink to="/strains/new" class="text-blue-700 hover:text-blue-400">Add a Strain</RouterLink> 
+    now.
+  </p>
 </div>
 </template>
 
