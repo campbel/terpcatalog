@@ -163,27 +163,29 @@ function removeImage(index: number) {
 
           <!-- Row 5 -->
 
-          <h2 class="block text-xl space-y-1 font-bold leading-tight text-gray-700 mb-3">Images</h2>
-          <p class="text-sm text-gray-400">Upload images of the product here.</p>
 
-          <div class="flex flex-wrap -mx-3 mb-3">
+          <div class="flex flex-wrap -mx-3 mb-3 justify-between items-center">
+
+            <div class="px-3 mb-3">
+              <h2 class="block text-xl space-y-1 font-bold leading-tight text-gray-700 mb-3">Images</h2>
+              <p class="text-sm text-gray-400 mb-3">Upload images of the product here.</p>
+            </div>
 
             <!-- Image -->
-            <div class="w-full px-3 mb-3 md:mb-0">
-              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-price">
-                
+            <div class="px-3 mb-3">
+              <label class="block  cursor-pointer bg-slate-400 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" for="grid-photo">
+                Add Image
+                <input type="file" accept="image/jpeg;image/png" id="grid-photo" @change="uploadImage" />
               </label>
-              <input type="file" accept="image/jpeg" id="grid-photo" @change="uploadImage"
-                class="block w-full text-sm p-2 text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
             </div>
 
           </div>
 
           <div class="flex flex-wrap -mx-3 mb-3">
 
-            <div v-for="(image, index) in newStrain.images" class="w-full md:w-1/2 px-3 mb-3">
-              <img :src="image" class="rounded shadow-md border-gray-400 border"/>
-              <button @click="removeImage(index)" class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
+            <div v-for="(image, index) in newStrain.images" class="md:w-1/2 px-3 mb-3">
+              <img :src="image" class="rounded shadow-md border-gray-200 max-h-48 border"/>
+              <button type="button" @click="removeImage(index)" class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
                 Remove
               </button>
             </div>
@@ -212,3 +214,9 @@ function removeImage(index: number) {
     </div>
   </main>
 </template>
+
+<style>
+input[type="file"] {
+  display: none;
+}
+</style>
