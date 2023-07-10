@@ -37,17 +37,18 @@ func main() {
 		log.FatalError("error during yaml.Unmarshal", err)
 	}
 
-	http.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux := http.NewServeMux()
+	mux.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(catalog); err != nil {
 			log.Error("error during json.Encode", err)
 		}
 	}))
-
-	http.Handle("/", http.FileServer(http.FS(fsys)))
+	mux.Handle("/", http.FileServer(http.FS(fsys)))
 
 	catalogServer := &http.Server{
-		Addr: ":" + config.Port(),
+		Addr:    ":" + config.Port(),
+		Handler: mux,
 	}
 	go startServer("catalog", catalogServer)
 
