@@ -10,7 +10,18 @@ const categories = ref([
   "Sativa",
   "Hybrid",
 ])
+
+class Producer {
+  id: string = ''
+  name: string = ''
+}
+
+const producers = ref<Producer[]>([])
+loadProducers()
+
+const images: [] = []
 const newStrain = ref({
+  "producer_id": "",
   "name": "",
   "category": "",
   "genetics": "",
@@ -18,12 +29,28 @@ const newStrain = ref({
   "terpenes": 0,
   "price": 0,
   "harvest_date": "",
+  "images": new Array<string>(),
 })
+
+function loadProducers() {
+  axios.get("/api/producers")
+    .then((response) => {
+      console.log(response.data);
+      producers.value = response.data.map((producer: any) => {
+        return {
+          id: producer.id,
+          name: producer.name,
+        };
+      })
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 
 function onSubmit() {
   axios.post("/api/strains", newStrain.value)
     .then((response) => {
-      // route to the strain list
       router.push({ name: "strains" });
     })
     .catch((error) => {
@@ -31,12 +58,28 @@ function onSubmit() {
     });
 }
 
+function uploadImage(e: any) {
+  if (!e.target || !e.target.files || e.target.files.length == 0) return
+  const image = e.target.files[0];
+  const reader = new FileReader();
+  reader.readAsDataURL(image);
+  reader.onload = e => {
+    if (!e.target) return
+    let image = e.target.result;
+    if (!image) return;
+    if (typeof image === 'string') newStrain.value.images.push(image);
+  };
+}
+
+function removeImage(index: number) {
+  newStrain.value.images.splice(index, 1);
+}
 </script>
 
 <template>
   <main>
     <div class="w-full">
-      <div class="bg-white max-w-lg mx-auto shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="bg-white max-w-lg mx-auto shadow-md rounded-xl border border-gray-200or px-8 pt-6 pb-8 mb-4">
 
         <h1 class="text-3xl space-y-1 font-bold leading-tight text-gray-700 mb-3">
           Add a Strain
@@ -48,6 +91,26 @@ function onSubmit() {
 
           <!-- Row 1-->
           <div class="flex flex-wrap -mx-3 mb-3">
+
+            <!-- Producer -->
+            <div class="w-full px-3 mb-3">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-producer">
+                Producer
+              </label>
+              <div class="relative">
+                <select v-model="newStrain.producer_id" id="grid-producer" required
+                  class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                  <option v-for="option in producers" :key="option.id" :value="option.id">
+                    {{ option.name }}
+                  </option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
 
             <!-- Name -->
             <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
@@ -144,6 +207,40 @@ function onSubmit() {
           <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-200">
 
           <!-- Row 5 -->
+
+
+          <div class="flex flex-wrap -mx-3 mb-3 justify-between items-center">
+
+            <div class="px-3 mb-3">
+              <h2 class="block text-xl space-y-1 font-bold leading-tight text-gray-700 mb-3">Images</h2>
+              <p class="text-sm text-gray-400 mb-3">Upload images of the product here.</p>
+            </div>
+
+            <!-- Image -->
+            <div class="px-3 mb-3">
+              <label class="block  cursor-pointer bg-slate-400 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" for="grid-photo">
+                Add Image
+                <input type="file" accept="image/jpeg;image/png" id="grid-photo" @change="uploadImage" />
+              </label>
+            </div>
+
+          </div>
+
+          <div class="flex flex-wrap -mx-3 mb-3">
+
+            <div v-for="(image, index) in newStrain.images" class="px-3 mb-3">
+              <img :src="image" class="rounded shadow-md border-gray-200 max-h-48 border"/>
+              <button type="button" @click="removeImage(index)" class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
+                Remove
+              </button>
+            </div>
+
+          </div>
+
+
+          <hr class="h-px my-6 bg-gray-200 border-0 dark:bg-gray-200">
+
+          <!-- Footer -->
           <div class="flex flex-wrap justify-end -mx-3 mb-0">
 
             <!-- Submit -->
@@ -158,6 +255,13 @@ function onSubmit() {
           </div>
 
         </form>
+      </div>
     </div>
-  </div>
-</main></template>
+  </main>
+</template>
+
+<style>
+input[type="file"] {
+  display: none;
+}
+</style>

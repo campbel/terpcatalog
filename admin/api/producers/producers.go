@@ -1,19 +1,19 @@
-package strains
+package producers
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/campbel/terpcatalog/admin/db/strains"
+	"github.com/campbel/terpcatalog/admin/db/producers"
 	"github.com/campbel/terpcatalog/admin/types"
 	"github.com/campbel/terpcatalog/util/log"
 )
 
 type Handler struct {
-	store strains.Store
+	store producers.Store
 }
 
-func NewHandler(store strains.Store) *Handler {
+func NewHandler(store producers.Store) *Handler {
 	return &Handler{store}
 }
 
@@ -34,24 +34,24 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleGet(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get("id")
 	if id != "" {
-		strain, err := h.store.GetStrain(r.Context(), id)
+		strain, err := h.store.GetProducer(r.Context(), id)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
-		err = json.NewEncoder(w).Encode([]types.Strain{strain})
+		err = json.NewEncoder(w).Encode([]types.Producer{strain})
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 		return
 	}
-	strains, err := h.store.GetStrains(r.Context())
+	producers, err := h.store.GetProducers(r.Context())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	err = json.NewEncoder(w).Encode(strains)
+	err = json.NewEncoder(w).Encode(producers)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -59,13 +59,13 @@ func (h *Handler) handleGet(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
-	var data types.Strain
+	var data types.Producer
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	strain, err := h.store.CreateStrain(r.Context(), data)
+	strain, err := h.store.CreateProducer(r.Context(), data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
@@ -84,7 +84,7 @@ func (h *Handler) handleDelete(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err := h.store.DeleteStrain(r.Context(), id)
+	err := h.store.DeleteProducer(r.Context(), id)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

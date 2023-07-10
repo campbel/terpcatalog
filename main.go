@@ -25,6 +25,8 @@ var (
 )
 
 func main() {
+	ctx := context.Background()
+
 	fsys, err := fs.Sub(public, "public")
 	if err != nil {
 		log.FatalError("error during fs.Sub", err)
@@ -35,24 +37,24 @@ func main() {
 		log.FatalError("error during yaml.Unmarshal", err)
 	}
 
-	http.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	mux := http.NewServeMux()
+	mux.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(catalog); err != nil {
 			log.Error("error during json.Encode", err)
 		}
 	}))
-
-	http.Handle("/", http.FileServer(http.FS(fsys)))
+	mux.Handle("/", http.FileServer(http.FS(fsys)))
 
 	catalogServer := &http.Server{
-		Addr: ":" + config.Port(),
+		Addr:    ":" + config.Port(),
+		Handler: mux,
 	}
 	go startServer("catalog", catalogServer)
 
-	adminServer := admin.NewServer(config.AdminPort())
+	adminServer := admin.NewServer(ctx, config.AdminPort())
 	go startServer("admin", adminServer)
 
-	ctx := context.Background()
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
 	<-sigs

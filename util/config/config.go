@@ -18,6 +18,10 @@ func Environment() string {
 	return getEnv("ENVIRONMENT", "production")
 }
 
+func MongoConnectionString() string {
+	return getEnv("MONGO_CONNECTION_STRING", "mongodb://localhost:27017")
+}
+
 func getEnv(key string, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value

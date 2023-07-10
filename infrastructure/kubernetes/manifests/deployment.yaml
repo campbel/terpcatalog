@@ -6,7 +6,7 @@ metadata:
   labels:
     app: terpcatalog
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: terpcatalog
@@ -26,3 +26,8 @@ spec:
               value: "8000"
             - name: ADMIN_PORT
               value: "8001"
+            - name: MONGO_CONNECTION_STRING
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb
+                  key: connection_string

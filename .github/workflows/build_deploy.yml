@@ -42,7 +42,7 @@ jobs:
       - name: Compile the Kubernetes deployment manifest
         env:
           IMAGE_TAG: ${{ github.sha }}
-        run: cat infrastructure/kubernetes/manifests/* | envsubst | tee infrastructure/kubernetes/deploy.yaml
+        run: cat infrastructure/kubernetes/manifests/* | envsubst '$IMAGE_TAG' | tee infrastructure/kubernetes/deploy.yaml
 
       - uses: actions/upload-artifact@v3
         with:

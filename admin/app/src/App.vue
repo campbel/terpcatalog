@@ -27,13 +27,12 @@ import HelloWorld from './components/HelloWorld.vue'
                   class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
                   Home
                 </RouterLink>
+                <RouterLink to="/producers"
+                  class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                  Producers</RouterLink>
                 <RouterLink to="/strains"
                   class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
                   Strains</RouterLink>
-                <RouterLink to="/strains/new"
-                  class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
-                  Add Strain
-                </RouterLink>
               </div>
             </div>
           </div>

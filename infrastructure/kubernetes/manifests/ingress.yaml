@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: terpcatalog
+  name: terpcatalog-public
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/issuer: "letsencrypt-prod"
@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - terpcatalog.campbel.io
-      secretName: terpcatalog
+      secretName: terpcatalog-public
   rules:
     - host: terpcatalog.campbel.io
       http:
@@ -27,16 +27,23 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: terpcatalog
+  name: terpcatalog-admin
   annotations:
     kubernetes.io/ingress.class: "nginx"
     cert-manager.io/issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      auth_request_set $user   $upstream_http_x_auth_request_user;
+      auth_request_set $email  $upstream_http_x_auth_request_email;
+      proxy_set_header X-Auth-Request-User  $user;
+      proxy_set_header X-Auth-Request-Email $email;
 spec:
   ingressClassName: nginx
   tls:
     - hosts:
         - admin.terpcatalog.campbel.io
-      secretName: terpcatalog
+      secretName: terpcatalog-admin
   rules:
     - host: admin.terpcatalog.campbel.io
       http:

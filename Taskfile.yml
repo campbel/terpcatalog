@@ -36,6 +36,9 @@ tasks:
       - npm install
 
   run:
+    deps: ["server", "admin"]
+
+  server:
     desc: "Run the application"
     interactive: true
     deps:
@@ -43,7 +46,7 @@ tasks:
     cmds:
       - air
 
-  admin-run:
+  admin:
     desc: "Run the admin application"
     deps:
       - setup_admin_npm

@@ -19,7 +19,17 @@ const router = createRouter({
       path: '/strains/new',
       name: 'strains-new',
       component: () => import('../views/StrainsNewView.vue')
-    }
+    },
+    {
+      path: '/producers',
+      name: 'producers',
+      component: () => import('../views/ProducersView.vue')
+    },
+    {
+      path: '/producers/new',
+      name: 'producers-new',
+      component: () => import('../views/ProducersNewView.vue')
+    },
   ]
 })
 
