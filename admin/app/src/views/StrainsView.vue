@@ -5,6 +5,7 @@ import moment from 'moment'
 
 class Strain {
   id: string = ''
+  producer_id: string = ''
   name: string = ''
   category: string = ''
   genetics: string = ''
@@ -15,6 +16,7 @@ class Strain {
 }
 
 const tableHeaders = ref([
+  "Producer",
   "Name",
   "Category",
   "Genetics",
@@ -24,18 +26,34 @@ const tableHeaders = ref([
   "Harvest Date",
 ])
 
-const strains = ref<Strain[]>([])
-loadStrains();
 
 function formatDate(date: string) {
   return moment(date, 'YYYY-MM-DD').fromNow();
 }
 
+const strains = ref<Strain[]>([])
+loadStrains();
 function loadStrains() {
   axios.get('/api/strains')
     .then((response) => {
       console.log(response.data)
       strains.value = response.data
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
+const producerMap = ref<Map<string,string>>(new Map)
+loadProducers();
+function loadProducers() {
+  axios.get('/api/producers')
+    .then((response) => {
+      console.log(response.data)
+      producerMap.value = response.data.reduce((acc: any, producer: any) => {
+        acc.set(producer.id, producer.name)
+        return acc
+      }, new Map<string,string>())
     })
     .catch((error) => {
       console.log(error)
@@ -87,6 +105,7 @@ function deleteStrain(id: string) {
     <tbody class="bg-white">
       <tr v-for="(strain, index) in strains"
         class="bg-white border-b hover:bg-gray-100">
+        <td class="text-gray-700 p-3">{{ producerMap.get(strain.producer_id) }}</td>
         <td class="text-gray-700 p-3">{{ strain.name }}</td>
         <td class="text-gray-700 p-3">{{ strain.category }}</td>
         <td class="text-gray-700 p-3">{{ strain.genetics }}</td>

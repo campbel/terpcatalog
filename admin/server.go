@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/campbel/terpcatalog/admin/api"
+	"github.com/campbel/terpcatalog/admin/db/producers"
 	"github.com/campbel/terpcatalog/admin/db/strains"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
@@ -43,14 +44,15 @@ func NewServer(ctx context.Context, port string) *http.Server {
 	if err != nil {
 		log.Fatal(err)
 	}
-	strainsCollection := client.Database("terpcatalog").Collection("strains")
-	strainsStore := strains.NewStore(strainsCollection)
 
 	mux := http.NewServeMux()
 	mux.Handle("/", fileHandler("text/html", index))
 	mux.Handle("/favicon.ico", fileHandler("image/x-icon", favicon))
 	mux.Handle("/assets/", http.FileServer(http.FS(assetFS)))
-	mux.Handle("/api/", api.NewHandler(strainsStore))
+	mux.Handle("/api/", api.NewHandler(
+		strains.NewStore(client.Database("terpcatalog").Collection("strains")),
+		producers.NewStore(client.Database("terpcatalog").Collection("producers")),
+	))
 
 	return &http.Server{
 		Addr:    ":" + port,

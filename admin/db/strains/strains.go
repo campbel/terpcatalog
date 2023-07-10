@@ -11,6 +11,7 @@ import (
 
 type Strain struct {
 	ID          primitive.ObjectID `bson:"_id"`
+	ProducerID  primitive.ObjectID `bson:"producer_id"`
 	Name        string             `bson:"name"`
 	Category    string             `bson:"category"`
 	Genetics    string             `bson:"genetics"`
@@ -99,6 +100,7 @@ func (db *Collection) DeleteStrain(ctx context.Context, id string) error {
 func translateToCommon(strain Strain) types.Strain {
 	return types.Strain{
 		ID:          strain.ID.Hex(),
+		ProducerID:  strain.ProducerID.Hex(),
 		Name:        strain.Name,
 		Category:    strain.Category,
 		Genetics:    strain.Genetics,
@@ -120,8 +122,10 @@ func translateToCommonSlice(strains []Strain) []types.Strain {
 
 func translateFromCommon(strain types.Strain) Strain {
 	id, _ := primitive.ObjectIDFromHex(strain.ID)
+	pid, _ := primitive.ObjectIDFromHex(strain.ProducerID)
 	return Strain{
 		ID:          id,
+		ProducerID:  pid,
 		Name:        strain.Name,
 		Category:    strain.Category,
 		Genetics:    strain.Genetics,

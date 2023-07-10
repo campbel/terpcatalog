@@ -11,7 +11,7 @@ class Producer {
   address: string = ''
   phone: string = ''
 }
-
+load()
 const producers = ref<Producer[]>([])
 
 function load() {
@@ -63,8 +63,8 @@ function del(id: string) {
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
       <tr class="bg-slate-300">
         <th scope="col" class="p-3">Name</th>
+        <th scope="col" class="p-3">Website</th>
         <th scope="col" class="p-3">Email</th>
-        <th scope="col" class="p-3">Address</th>
         <th scope="col" class="p-3">Phone</th>
         <th scope="col" class="p-3"></th>
       </tr>
@@ -73,9 +73,9 @@ function del(id: string) {
       <tr v-for="(producer, index) in producers"
         class="bg-white border-b hover:bg-gray-100">
         <td class="text-gray-700 p-3">{{ producer.name }}</td>
+        <td class="text-gray-700 p-3">{{ producer.website }}</td>
         <td class="text-gray-700 p-3">{{ producer.email }}</td>
-        <td class="text-gray-700 p-3">{{ producer.address }}</td>
-        <td class="text-gray-700 p-3">{{ producer.phone }}%</td>
+        <td class="text-gray-700 p-3">{{ producer.phone }}</td>
         <td class="text-red-400 text-right p-3">
           <button @click="del(producer.id)" class="border px-2 rounded-xl border-red-400 hover:bg-red-400 hover:text-white">delete</button>
         </td>

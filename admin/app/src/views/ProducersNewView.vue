@@ -8,16 +8,16 @@ const router = useRouter();
 const images: [] = []
 const newProducer = ref({
   "name": "",
-  "email": "",
   "website": "",
+  "email": "",
+  "phone": "",
   "address": "",
   "contact": {
-    "firstName": "",
-    "lastName": "",
+    "first_name": "",
+    "last_name": "",
     "email": "",
     "phone": "",
   },
-  "phone": "",
 })
 
 function onSubmit() {
@@ -112,7 +112,7 @@ function onSubmit() {
               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-contact-first">
                 First Name
               </label>
-              <input v-model="newProducer.contact.firstName" id="grid-phone" type="text" placeholder="Sarah" required
+              <input v-model="newProducer.contact.first_name" id="grid-phone" type="text" placeholder="Sarah" required
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
             </div>
 
@@ -121,7 +121,7 @@ function onSubmit() {
               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-contact-last">
                 Last Name
               </label>
-              <input v-model="newProducer.contact.lastName" id="grid-contact-last" type="text" placeholder="Smith" required
+              <input v-model="newProducer.contact.last_name" id="grid-contact-last" type="text" placeholder="Smith" required
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
             </div>
 

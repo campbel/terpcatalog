@@ -2,6 +2,7 @@ package types
 
 type Strain struct {
 	ID          string   `json:"id"`
+	ProducerID  string   `json:"producer_id"`
 	Name        string   `json:"name"`
 	Category    string   `json:"category"`
 	Genetics    string   `json:"genetics"`
