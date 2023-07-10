@@ -92,7 +92,15 @@ function deleteStrain(id: string) {
       </div>
   </div>
 
-  <div v-if="strains && strains.length > 0"
+  <p v-if="producerMap.size == 0" class="text-gray-400 text-md">
+    No producers found. Create a
+    <RouterLink to="/producers" class="text-blue-700 underline">producer</RouterLink>
+    before creating a strain.
+  </p>
+  <p v-else-if="!strains || strains.length == 0" class="text-gray-400 text-md">
+    We couldn't find any strains.
+  </p>
+  <div v-else
       class="relative overflow-x-auto border border-slate-300 sm:rounded-lg">
   <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -120,10 +128,8 @@ function deleteStrain(id: string) {
     </tbody>
   </table>
   </div>
-  <p v-else class="text-gray-400 text-md">
-    We couldn't find any strains.
-  </p>
 </div>
+
 </template>
 
 <style>
