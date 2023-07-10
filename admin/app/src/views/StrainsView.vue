@@ -56,12 +56,23 @@ function deleteStrain(id: string) {
 
 <template>
   <div class="px-6 max-w-4xl mx-auto">
-  <h1 class="text-3xl font-bold leading-tight text-gray-700 mb-6">
-    Strains
-  </h1>
-  <p class="text-xs text-gray-400 mb-6">
-    Your current strains are listed below.
-  </p>
+
+    <div class="flex justify-between items-end mb-6">
+      <div>
+        <h1 class="text-3xl font-bold leading-tight text-gray-700 mb-3">
+          Strains
+        </h1>
+        <p class="text-xs text-gray-400">
+          Your current strains are listed below.
+        </p>
+      </div>
+      <div>
+        <RouterLink to="/strains/new"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          New Strain
+        </RouterLink>
+      </div>
+  </div>
 
   <div v-if="strains && strains.length > 0"
       class="relative overflow-x-auto border border-slate-300 sm:rounded-lg">
@@ -92,8 +103,6 @@ function deleteStrain(id: string) {
   </div>
   <p v-else class="text-gray-400 text-md">
     We couldn't find any strains.
-    <RouterLink to="/strains/new" class="text-blue-700 hover:text-blue-400">Add a Strain</RouterLink> 
-    now.
   </p>
 </div>
 </template>
