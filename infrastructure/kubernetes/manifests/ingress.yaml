@@ -11,7 +11,7 @@ spec:
   tls:
     - hosts:
         - terpcatalog.campbel.io
-      secretName: terpcatalog
+      secretName: terpcatalog-public
   rules:
     - host: terpcatalog.campbel.io
       http:
