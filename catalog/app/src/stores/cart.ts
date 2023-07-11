@@ -4,6 +4,14 @@ import { defineStore } from 'pinia'
 export const useCartStore = defineStore('cart', () => {
   const cart = ref<Map<string, number>>(new Map())
 
+  const items = computed(() => {
+    const items: { id: string; count: number }[] = []
+    for (let [id, count] of cart.value.entries()) {
+      items.push({ id, count })
+    }
+    return items
+  })
+
   const count = computed(() => {
     let count = 0;
     for (let value of cart.value.values()) {
@@ -24,5 +32,5 @@ export const useCartStore = defineStore('cart', () => {
     cart.value.set(id, count)
   }
 
-  return { add, set, count }
+  return { add, set, items, count }
 })
