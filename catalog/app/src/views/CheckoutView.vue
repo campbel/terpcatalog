@@ -44,6 +44,7 @@ axios.get('/api/strains')
   })
 
 function onSubmit() {
+  cart.reset();
   router.push({ name: 'checkout-success' });
 }
 
