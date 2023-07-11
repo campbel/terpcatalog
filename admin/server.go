@@ -7,8 +7,8 @@ import (
 	"net/http"
 
 	"github.com/campbel/terpcatalog/admin/api"
-	"github.com/campbel/terpcatalog/admin/db/producers"
-	"github.com/campbel/terpcatalog/admin/db/strains"
+	"github.com/campbel/terpcatalog/shared/db/producers"
+	"github.com/campbel/terpcatalog/shared/db/strains"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"go.mongodb.org/mongo-driver/mongo"

@@ -3,7 +3,7 @@ package strains
 import (
 	"context"
 
-	"github.com/campbel/terpcatalog/admin/types"
+	"github.com/campbel/terpcatalog/shared/types"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
