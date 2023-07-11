@@ -3,17 +3,15 @@ package main
 import (
 	"context"
 	"embed"
-	"encoding/json"
-	"io/fs"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/campbel/terpcatalog/admin"
+	"github.com/campbel/terpcatalog/catalog"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
-	"gopkg.in/yaml.v3"
 )
 
 var (
@@ -27,29 +25,7 @@ var (
 func main() {
 	ctx := context.Background()
 
-	fsys, err := fs.Sub(public, "public")
-	if err != nil {
-		log.FatalError("error during fs.Sub", err)
-	}
-
-	var catalog any
-	if err := yaml.Unmarshal([]byte(catalogYaml), &catalog); err != nil {
-		log.FatalError("error during yaml.Unmarshal", err)
-	}
-
-	mux := http.NewServeMux()
-	mux.Handle("/api/catalog", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		if err := json.NewEncoder(w).Encode(catalog); err != nil {
-			log.Error("error during json.Encode", err)
-		}
-	}))
-	mux.Handle("/", http.FileServer(http.FS(fsys)))
-
-	catalogServer := &http.Server{
-		Addr:    ":" + config.Port(),
-		Handler: mux,
-	}
+	catalogServer := catalog.NewServer(ctx, config.CatalogPort())
 	go startServer("catalog", catalogServer)
 
 	adminServer := admin.NewServer(ctx, config.AdminPort())
