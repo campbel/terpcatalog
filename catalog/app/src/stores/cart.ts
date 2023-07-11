@@ -28,9 +28,13 @@ export const useCartStore = defineStore('cart', () => {
     }
   }
 
+  function has(id: string) {
+    return cart.value.has(id)
+  }
+
   function set(id: string, count: number) {
     cart.value.set(id, count)
   }
 
-  return { add, set, items, count }
+  return { add, has, set, items, count }
 })
