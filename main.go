@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"embed"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,14 +11,6 @@ import (
 	"github.com/campbel/terpcatalog/catalog"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
-)
-
-var (
-	//go:embed public
-	public embed.FS
-
-	//go:embed data/catalog.yaml
-	catalogYaml string
 )
 
 func main() {
