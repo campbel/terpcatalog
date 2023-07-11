@@ -1,4 +1,4 @@
-package admin
+package catalog
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/campbel/terpcatalog/admin/api"
+	"github.com/campbel/terpcatalog/catalog/api"
 	"github.com/campbel/terpcatalog/shared/db/producers"
 	"github.com/campbel/terpcatalog/shared/db/strains"
 	"github.com/campbel/terpcatalog/util/config"

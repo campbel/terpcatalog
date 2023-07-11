@@ -2,7 +2,7 @@ package config
 
 import "os"
 
-func Port() string {
+func CatalogPort() string {
 	return getEnv("PORT", "8080")
 }
 

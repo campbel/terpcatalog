@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/campbel/terpcatalog/admin/db/producers"
-	"github.com/campbel/terpcatalog/admin/types"
+	"github.com/campbel/terpcatalog/shared/db/producers"
+	"github.com/campbel/terpcatalog/shared/types"
 	"github.com/campbel/terpcatalog/util/log"
 )
 
