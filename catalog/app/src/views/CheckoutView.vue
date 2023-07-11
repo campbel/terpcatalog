@@ -155,28 +155,33 @@ function onSubmit() {
           <div class="w-1/2 pl-6">
             <h2 class="text-base font-semibold leading-7 text-gray-900">Order Summary</h2>
 
-            <div v-for="order in orders" class="border-b py-4">
-
-              <div class="flex justify-between">
-                <div class="flex">
-                  <img :src="order.strain.images[0]" class="mr-3 h-32 rounded-lg" />
-                  <div>
-                    <h2>{{ order.strain.name }}<p class="text-xs">{{ order.strain.category }}</p>
-                    </h2>
-                    <p>${{ order.strain.price }}</p>
-                  </div>
-                </div>
-                <div class="mt-2">
-                  <input v-model="order.quantity" type="number" name="first-name" id="first-name" autocomplete="given-name"
-                    class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+            <div v-for="(order, index) in orders" class="border-b py-4">
+              <div class="flex mb-3 items-end">
+                <img :src="order.strain.images[0]" class="mr-3 h-32 rounded-lg" />
+                <div>
+                  <h2>{{ order.strain.name }}<p class="text-xs">{{ order.strain.category }}</p>
+                  </h2>
+                  <p>${{ order.strain.price }} x {{ order.quantity }} = ${{ order.quantity * order.strain.price }}</p>
                 </div>
               </div>
-
+              <div class="flex">
+                <select v-model="order.quantity"
+                  class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-center">
+                  <option v-for="num in 10" :key="num" :value="num">{{ num }}</option>
+                </select>
+                <button @click="orders.splice(index, 1)" class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2">
+                  Remove</button>
+              </div>
             </div>
+
+            <div class="flex justify-between mt-3">
+              <h2 class="bold text-xl">Total</h2>
+              <h2 class="bold text-xl">${{ orders.reduce((acc, order) => acc + (order.quantity * order.strain.price), 0) }}</h2>
+            </div>
+
           </div>
 
         </div>
-
       </div>
     </div>
 
