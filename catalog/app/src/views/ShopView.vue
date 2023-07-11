@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
+import { useCartStore } from '../stores/cart';
+
+const cart = useCartStore();
 
 class Strain {
   id: string = '';
@@ -15,7 +18,6 @@ class Strain {
 
 const strains = ref<Strain[]>([]);
 const producers = ref([]);
-const cart = ref<Map<string,number>>(new Map());
 
 axios.get('/api/strains')
   .then((response) => {
@@ -36,18 +38,11 @@ axios.get('/api/strains')
   })
 
 function addToCart(strain: Strain) {
-  if (cart.value.has(strain.id))
-    cart.value.set(strain.id, cart.value.get(strain.id)! + 1);
-  else
-    cart.value.set(strain.id, 1);
+  cart.add(strain.id);
 }
 
 function itemCount() {
-  let count = 0;
-  for (let value of cart.value.values()) {
-    count += value;
-  }
-  return count;
+  return cart.count;
 }
 
 </script>
@@ -60,10 +55,10 @@ function itemCount() {
         <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
           <div class="flex justify-between items-center py-2 px-4 h-14 shadow border rounded-md ">
             <h2 class="text-2xl font-bold tracking-tight text-gray-900">Available Strains</h2>
-            <button v-if="itemCount() > 0" title="checkout"
+            <RouterLink v-if="itemCount() > 0" to="checkout" title="checkout"
                 class="text-sm antialiased border-2 bg-white border-slate-400 hover:border-slate-600 hover:text-white py-2 px-2 rounded-lg">
               🛒 <span class="font-mono rounded-full text-white bg-orange-500 px-2 py-1">{{ itemCount() }}</span>
-            </button>
+            </RouterLink>
           </div>
           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 
