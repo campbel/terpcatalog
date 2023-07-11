@@ -60,9 +60,9 @@ function onSubmit() {
 
         </div>
 
-        <div class="mt-6 flex justify-between">
+        <div class="mt-6 md:flex justify-between">
 
-          <div class="w-1/2 pr-6">
+          <div class="md:w-1/2 w-full pr-6 mb-6">
             <form @submit.prevent="onSubmit">
               <div class="space-y-12">
 
@@ -153,7 +153,7 @@ function onSubmit() {
             </form>
           </div>
 
-          <div class="w-1/2 pl-6">
+          <div class="md:w-1/2 w-full pl-6 mb-6">
             <h2 class="text-base font-semibold leading-7 text-gray-900">Order Summary</h2>
 
             <div v-for="(order, index) in orders" class="border-b py-4">
