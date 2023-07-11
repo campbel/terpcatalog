@@ -36,7 +36,6 @@ loadStrains();
 function loadStrains() {
   axios.get('/api/strains')
     .then((response) => {
-      console.log(response.data)
       strains.value = response.data
     })
     .catch((error) => {
@@ -49,7 +48,6 @@ loadProducers();
 function loadProducers() {
   axios.get('/api/producers')
     .then((response) => {
-      console.log(response.data)
       producerMap.value = response.data.reduce((acc: any, producer: any) => {
         acc.set(producer.id, producer.name)
         return acc
@@ -63,7 +61,6 @@ function loadProducers() {
 function deleteStrain(id: string) {
   axios.delete(`/api/strains?id=${id}`)
     .then((response) => {
-      console.log(response.data)
       loadStrains()
     })
     .catch((error) => {

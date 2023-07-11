@@ -17,7 +17,6 @@ const producers = ref<Producer[]>([])
 function load() {
   axios.get('/api/producers')
     .then((response) => {
-      console.log(response.data)
       producers.value = response.data
     })
     .catch((error) => {
@@ -28,7 +27,6 @@ function load() {
 function del(id: string) {
   axios.delete(`/api/producers?id=${id}`)
     .then((response) => {
-      console.log(response.data)
       load()
     })
     .catch((error) => {

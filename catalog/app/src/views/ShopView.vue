@@ -21,7 +21,6 @@ const producers = ref([]);
 
 axios.get('/api/strains')
   .then((response) => {
-    console.log(response.data)
     strains.value = response.data
   })
   .catch((error) => {
@@ -30,7 +29,6 @@ axios.get('/api/strains')
 
 axios.get('/api/strains')
   .then((response) => {
-    console.log(response.data)
     producers.value = response.data
   })
   .catch((error) => {

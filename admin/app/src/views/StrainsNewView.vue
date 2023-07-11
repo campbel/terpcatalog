@@ -35,7 +35,6 @@ const newStrain = ref({
 function loadProducers() {
   axios.get("/api/producers")
     .then((response) => {
-      console.log(response.data);
       producers.value = response.data.map((producer: any) => {
         return {
           id: producer.id,
