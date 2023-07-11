@@ -36,5 +36,11 @@ export const useCartStore = defineStore('cart', () => {
     cart.value.set(id, count)
   }
 
-  return { add, has, set, items, count }
+  function del(id: string) {
+    if (cart.value.has(id)) {
+      cart.value.delete(id)
+    }
+  }
+
+  return { add, has, set, del, items, count, cart }
 })
