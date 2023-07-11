@@ -43,10 +43,11 @@ tasks:
       - npm install
 
   run:
+    desc: "Run the application"
     deps: ["server", "admin", "catalog"]
 
   server:
-    desc: "Run the application"
+    desc: "Run the server"
     interactive: true
     deps:
       - setup_air
