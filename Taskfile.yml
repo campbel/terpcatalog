@@ -35,8 +35,15 @@ tasks:
     cmds:
       - npm install
 
+  setup_catalog_npm:
+    desc: "Install catalog dependencies"
+    internal: true
+    dir: catalog/app
+    cmds:
+      - npm install
+
   run:
-    deps: ["server", "admin"]
+    deps: ["server", "admin", "catalog"]
 
   server:
     desc: "Run the application"
@@ -67,6 +74,35 @@ tasks:
     deps:
       - setup_admin_npm
     dir: admin/app
+    sources:
+      - index.html
+      - src/**/*
+    generates:
+      - dist
+    cmds:
+      - npm run build
+
+  catalog:
+    desc: "Run the catalog application"
+    deps:
+      - setup_catalog_npm
+    dir: catalog/app
+    cmds:
+      - npm run dev
+
+  catalog-test:
+    desc: "Run the catalog tests"
+    deps:
+      - setup_catalog_npm
+    dir: catalog/app
+    cmds:
+      - npm run test:unit
+    
+  catalog-build:
+    desc: "Build the catalog application"
+    deps:
+      - setup_catalog_npm
+    dir: catalog/app
     sources:
       - index.html
       - src/**/*
