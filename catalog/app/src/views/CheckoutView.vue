@@ -4,6 +4,9 @@ import axios from 'axios';
 import { useCartStore } from '../stores/cart';
 import { useRouter } from 'vue-router';
 
+import { Strain } from '../types/Strain';
+import { OrderItem, OrderInformation } from '../types/order';
+
 const cart = useCartStore();
 const router = useRouter();
 
@@ -11,36 +14,9 @@ if (cart.count === 0) {
   router.push({ name: 'shop' });
 }
 
-class Strain {
-  id: string = '';
-  name: string = '';
-  category: string = '';
-  genetics: string = '';
-  thc: number = 0;
-  terpenes: number = 0;
-  price: number = 0;
-  images: string[] = [];
-}
-
-class Order {
-  strain: Strain = new Strain();
-  quantity: number = 0;
-}
-
 const strains = ref<Map<string, Strain>>(new Map());
-const orders = ref<Order[]>([]);
-const information = ref({
-  company_name: '',
-  license_number: '',
-  email: '',
-  phone: '',
-  address: {
-    street: '',
-    city: '',
-    state: '',
-    postal: '',
-  },
-});
+const orders = ref<OrderItem[]>([]);
+const information = ref(new OrderInformation());
 
 axios.get('/api/strains')
   .then((response) => {
