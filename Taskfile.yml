@@ -47,6 +47,8 @@ tasks:
     deps: ["server", "admin", "catalog"]
 
   server:
+    env:
+      ENVIRONMENT: development
     desc: "Run the server"
     interactive: true
     deps:

@@ -94,7 +94,7 @@ func (c *Client) SendEmail(to []types.EmailAddress, subject, content string) err
 		return err
 	}
 
-	log.Info("brevo api response", "to", to, "subject", subject, "body", string(body))
+	log.Debug("brevo api response", "to", to, "subject", subject, "body", string(body))
 
 	return nil
 }
