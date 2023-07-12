@@ -12,13 +12,12 @@ if (cart.count === 0) {
   router.push({ name: 'shop' });
 }
 
-const orders = ref<OrderItem[]>([]);
 const information = ref(new OrderInformation());
 
 function onSubmit() {
   axios.post('/api/orders', {
     information: information.value,
-    items: orders.value,
+    items: cart.items,
   }).then(() => {
     cart.reset();
     router.push({ name: 'checkout-success' });
@@ -32,7 +31,7 @@ function onSubmit() {
   <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700"
     aria-label="Global">
     <div class="w-full flex  h-10 justify-between">
-      <h2 class="text-3xl text-white">Terp Scout</h2>
+      <h2 class="text-3xl text-white">TerpScout</h2>
     </div>
   </nav>
   <main>
@@ -170,8 +169,7 @@ function onSubmit() {
 
             <div class="flex justify-between mt-3">
               <h2 class="bold text-xl">Total</h2>
-              <h2 class="bold text-xl">${{ orders.reduce((acc, order) => acc + (order.quantity * order.strain.price), 0)
-              }}</h2>
+              <h2 class="bold text-xl">${{ cart.total }}</h2>
             </div>
 
           </div>

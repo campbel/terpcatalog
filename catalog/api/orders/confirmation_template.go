@@ -71,7 +71,7 @@ var confirmationTemplate = `
 	<body>
 		<div class="container">
 			<div class="header">
-				<h1>Terp Scout</h1>
+				<h1>TerpScout</h1>
 			</div>
 			<div class="body">
 				<h2>Order Confirmation</h2>
@@ -96,7 +96,7 @@ var confirmationTemplate = `
 				<h3>Order Total: {{ .Total }}</h3>
 			</div>
 			<div class="footer">
-				<p>Terp Scout</p>
+				<p>TerpScout</p>
 			</div>
 		</div>
 	</body>

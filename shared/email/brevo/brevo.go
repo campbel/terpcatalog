@@ -54,11 +54,11 @@ type Email struct {
 func (c *Client) SendEmail(to []types.EmailAddress, subject, content string) error {
 	data, err := json.Marshal(Email{
 		Sender: types.EmailAddress{
-			Name:  "Terp Scout",
+			Name:  "TerpScout",
 			Email: config.EmailSender(),
 		},
 		ReplyTo: types.EmailAddress{
-			Name:  "Terp Scout",
+			Name:  "TerpScout",
 			Email: config.EmailSender(),
 		},
 		To:          to,

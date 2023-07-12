@@ -35,6 +35,14 @@ export const useCartStore = defineStore('cart', () => {
     return count;
   })
 
+  const total = computed(() => {
+    let total = 0;
+    for (let item of cart.value.values()) {
+      total += item.quantity * item.strain.price;
+    }
+    return total;
+  })
+
   function add(strain: Strain) {
     if (!cart.value.has(strain.id)) {
       cart.value.set(strain.id, new OrderItem(strain, 0))
@@ -80,5 +88,5 @@ export const useCartStore = defineStore('cart', () => {
     cart.value.clear()
   }
 
-  return { add, has, set, get, del, reset, items, count, cart }
+  return { add, has, set, get, del, reset, items, count, total }
 })
