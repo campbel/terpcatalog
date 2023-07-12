@@ -9,6 +9,7 @@ import (
 	"github.com/campbel/terpcatalog/admin/api"
 	"github.com/campbel/terpcatalog/shared/db/producers"
 	"github.com/campbel/terpcatalog/shared/db/strains"
+	inthttp "github.com/campbel/terpcatalog/shared/http"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -46,8 +47,8 @@ func NewServer(ctx context.Context, port string) *http.Server {
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/", fileHandler("text/html", index))
-	mux.Handle("/favicon.ico", fileHandler("image/x-icon", favicon))
+	mux.Handle("/", inthttp.FileHandler("text/html", index))
+	mux.Handle("/favicon.ico", inthttp.FileHandler("image/x-icon", favicon))
 	mux.Handle("/assets/", http.FileServer(http.FS(assetFS)))
 	mux.Handle("/api/", api.NewHandler(
 		strains.NewStore(client.Database("terpcatalog").Collection("strains")),
@@ -56,20 +57,6 @@ func NewServer(ctx context.Context, port string) *http.Server {
 
 	return &http.Server{
 		Addr:    ":" + port,
-		Handler: logWrapper(mux),
+		Handler: inthttp.LogWrapper(mux),
 	}
-}
-
-func fileHandler(contentType string, content []byte) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", contentType)
-		w.Write(content)
-	})
-}
-
-func logWrapper(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Info("request", "method", r.Method, "path", r.URL.Path, "email", r.Header.Get("X-Auth-Request-Email"))
-		handler.ServeHTTP(w, r)
-	})
 }
