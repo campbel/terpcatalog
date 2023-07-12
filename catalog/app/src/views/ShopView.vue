@@ -28,12 +28,14 @@ axios.get('/api/strains')
 </script>
 
 <template>
-  <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700" aria-label="Global">
+  <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700"
+    aria-label="Global">
     <div class="w-full flex h-10 justify-between">
       <h2 class="text-3xl text-white">TerpScout</h2>
       <RouterLink :hidden="cart.count == 0" to="checkout" title="checkout"
         class="text-sm antialiased border-2 bg-white border-slate-800 hover:border-slate-400 py-2 px-2 rounded-lg">
-        <span class="uppercase text-xs font-bold">Cart</span> <span class="font-mono rounded-full text-white bg-sky-950 px-2 py-1">{{ cart.count }}</span>
+        <span class="uppercase text-xs font-bold">Cart</span> <span
+          class="font-mono rounded-full text-white bg-sky-950 px-2 py-1">{{ cart.count }}</span>
       </RouterLink>
     </div>
   </nav>
@@ -41,9 +43,13 @@ axios.get('/api/strains')
     <!-- Your content -->
     <div class="bg-white m-auto">
       <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 md:max-w-5xl lg:px-8">
-        <div class="py-2 h-14 mb-6">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900">Available Strains</h2>
-          <p>All the strains ready to order.</p>
+        <div class="py-2 mb-6">
+          <h1 class="text-3xl font-bold leading-tight text-gray-700 mb-3">
+            Available Strains
+          </h1>
+          <p class="text-xs text-gray-400">
+            All the strains ready to order.
+          </p>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 

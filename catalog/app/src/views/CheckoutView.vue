@@ -38,9 +38,13 @@ function onSubmit() {
     <!-- Your content -->
     <div class="bg-white m-auto">
       <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 md:max-w-5xl lg:px-8">
-        <div class="py-2 h-14 mb-6">
-          <h2 class="text-2xl font-bold tracking-tight text-gray-900">Checkout</h2>
-          <p>Submit the order to TerpScout for processing.</p>
+        <div class="py-2 mb-6">
+          <h1 class="text-3xl font-bold leading-tight text-gray-700 mb-3">
+            Checkout
+          </h1>
+          <p class="text-xs text-gray-400">
+            Submit the order to TerpScout for processing.
+          </p>
         </div>
 
         <div class="mt-6 md:flex justify-between">
