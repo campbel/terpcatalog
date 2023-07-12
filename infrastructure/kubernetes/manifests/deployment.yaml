@@ -31,3 +31,8 @@ spec:
                 secretKeyRef:
                   name: mongodb
                   key: connection_string
+            - name: EMAIL_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: email
+                  key: token

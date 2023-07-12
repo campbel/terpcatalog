@@ -22,6 +22,6 @@ type OrderAddress struct {
 }
 
 type OrderItem struct {
-	StrainID string `json:"strain_id"`
+	Strain   Strain `json:"strain"`
 	Quantity int    `json:"quantity"`
 }

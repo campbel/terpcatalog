@@ -58,12 +58,7 @@ axios.get('/api/strains')
 function onSubmit() {
   axios.post('/api/orders', {
     information: information.value,
-    items: orders.value.map((order) => {
-      return {
-        strain_id: order.strain.id,
-        quantity: order.quantity,
-      }
-    })
+    items: orders.value,
   }).then((response) => {
     cart.reset();
     router.push({ name: 'checkout-success' });

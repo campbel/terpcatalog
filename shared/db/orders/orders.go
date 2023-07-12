@@ -137,7 +137,9 @@ func translateToCommonItems(items []OrderItem) []types.OrderItem {
 	commonItems := make([]types.OrderItem, len(items))
 	for i, item := range items {
 		commonItems[i] = types.OrderItem{
-			StrainID: item.StrainID,
+			Strain: types.Strain{
+				ID: item.StrainID,
+			},
 			Quantity: item.Quantity,
 		}
 	}
@@ -180,7 +182,7 @@ func translateFromCommonItems(items []types.OrderItem) []OrderItem {
 	commonItems := make([]OrderItem, len(items))
 	for i, item := range items {
 		commonItems[i] = OrderItem{
-			StrainID: item.StrainID,
+			StrainID: item.Strain.ID,
 			Quantity: item.Quantity,
 		}
 	}

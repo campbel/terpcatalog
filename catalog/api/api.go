@@ -9,12 +9,13 @@ import (
 	os "github.com/campbel/terpcatalog/shared/db/orders"
 	ps "github.com/campbel/terpcatalog/shared/db/producers"
 	ss "github.com/campbel/terpcatalog/shared/db/strains"
+	"github.com/campbel/terpcatalog/shared/email"
 )
 
-func NewHandler(strainStore ss.Store, producerStore ps.Store, orderStore os.Store) *http.ServeMux {
+func NewHandler(strainStore ss.Store, producerStore ps.Store, orderStore os.Store, sender email.Sender) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.Handle("/api/strains", sapi.NewHandler(strainStore))
 	mux.Handle("/api/producers", papi.NewHandler(producerStore))
-	mux.Handle("/api/orders", oapi.NewHandler(orderStore))
+	mux.Handle("/api/orders", oapi.NewHandler(orderStore, sender))
 	return mux
 }

@@ -1,19 +1,25 @@
 package orders
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
+	"text/template"
 
 	"github.com/campbel/terpcatalog/shared/db/orders"
+	"github.com/campbel/terpcatalog/shared/email"
 	"github.com/campbel/terpcatalog/shared/types"
+	"github.com/campbel/terpcatalog/util/config"
+	"github.com/campbel/terpcatalog/util/log"
 )
 
 type Handler struct {
-	store orders.Store
+	store  orders.Store
+	sender email.Sender
 }
 
-func NewHandler(store orders.Store) *Handler {
-	return &Handler{store}
+func NewHandler(store orders.Store, sender email.Sender) *Handler {
+	return &Handler{store, sender}
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -41,6 +47,38 @@ func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
+	content, err := generateConfirmationTemplate(order)
+	if err != nil {
+		log.Error("error getting order email content", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.sender.SendEmail([]types.EmailAddress{{
+		Name:  order.Information.Company,
+		Email: order.Information.Email,
+	}},
+		"TerpScout Order Confirmation", content)
+	if err != nil {
+		log.Error("error sending email content", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	content, err = generateOrderTemplate(order)
+	if err != nil {
+		log.Error("error getting order email content", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	err = h.sender.SendEmail(config.EmailOrderList(), "TerpScout New Order", content)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(order)
 	if err != nil {
@@ -81,7 +119,7 @@ func isValidOrder(order types.Order) bool {
 		return false
 	}
 	for _, item := range order.Items {
-		if item.StrainID == "" {
+		if item.Strain.ID == "" {
 			return false
 		}
 		if item.Quantity <= 0 {
@@ -89,4 +127,13 @@ func isValidOrder(order types.Order) bool {
 		}
 	}
 	return true
+}
+
+func renderTemplate(t *template.Template, data any) (string, error) {
+	var buf bytes.Buffer
+	err := t.Execute(&buf, data)
+	if err != nil {
+		return "", err
+	}
+	return buf.String(), nil
 }

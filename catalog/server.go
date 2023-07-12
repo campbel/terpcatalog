@@ -10,6 +10,7 @@ import (
 	"github.com/campbel/terpcatalog/shared/db/orders"
 	"github.com/campbel/terpcatalog/shared/db/producers"
 	"github.com/campbel/terpcatalog/shared/db/strains"
+	"github.com/campbel/terpcatalog/shared/email/brevo"
 	"github.com/campbel/terpcatalog/util/config"
 	"github.com/campbel/terpcatalog/util/log"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -46,6 +47,9 @@ func NewServer(ctx context.Context, port string) *http.Server {
 		log.Fatal(err)
 	}
 
+	// Email Sender
+	sender := brevo.NewClient(config.EmailToken())
+
 	mux := http.NewServeMux()
 	mux.Handle("/", fileHandler("text/html", index))
 	mux.Handle("/favicon.ico", fileHandler("image/x-icon", favicon))
@@ -54,6 +58,7 @@ func NewServer(ctx context.Context, port string) *http.Server {
 		strains.NewStore(client.Database("terpcatalog").Collection("strains")),
 		producers.NewStore(client.Database("terpcatalog").Collection("producers")),
 		orders.NewStore(client.Database("terpcatalog").Collection("orders")),
+		sender,
 	))
 
 	return &http.Server{
