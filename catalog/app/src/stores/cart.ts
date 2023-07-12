@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { OrderItem } from '@/types/order'
 import { Strain } from '@/types/strain'
@@ -6,7 +6,20 @@ import { Strain } from '@/types/strain'
 export const useCartStore = defineStore('cart', () => {
   const cart = ref<Map<string, OrderItem>>(new Map())
 
-  const items = computed(() : OrderItem[] => {
+  // Load cart from local storage
+  let loadedCart = localStorage.getItem('cart')
+  if (loadedCart) {
+    JSON.parse(loadedCart)?.forEach((item: any) => {
+      cart.value.set(item[0], new OrderItem(item[1].strain, item[1].quantity))
+    })
+  }
+
+  // Save cart to local storage
+  watch(cart, (newCart) => {
+    localStorage.setItem('cart', JSON.stringify(Array.from(newCart.entries())))
+  }, { deep: true })
+
+  const items = computed((): OrderItem[] => {
     let items: OrderItem[] = []
     for (let item of cart.value.values()) {
       items.push(item)
@@ -47,7 +60,7 @@ export const useCartStore = defineStore('cart', () => {
     }
   }
 
-  function get(id: string) : OrderItem {
+  function get(id: string): OrderItem {
     if (cart.value.has(id)) {
       let item = cart.value.get(id)
       if (item) {
