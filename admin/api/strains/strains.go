@@ -6,7 +6,6 @@ import (
 
 	"github.com/campbel/terpcatalog/shared/db/strains"
 	"github.com/campbel/terpcatalog/shared/types"
-	"github.com/campbel/terpcatalog/util/log"
 )
 
 type Handler struct {
@@ -18,7 +17,6 @@ func NewHandler(store strains.Store) *Handler {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Info("strain api", "method", r.Method, "path", r.URL.Path)
 	switch r.Method {
 	case http.MethodGet:
 		h.handleGet(w, r)

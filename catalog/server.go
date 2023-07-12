@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/campbel/terpcatalog/catalog/api"
+	"github.com/campbel/terpcatalog/shared/db/orders"
 	"github.com/campbel/terpcatalog/shared/db/producers"
 	"github.com/campbel/terpcatalog/shared/db/strains"
 	"github.com/campbel/terpcatalog/util/config"
@@ -52,6 +53,7 @@ func NewServer(ctx context.Context, port string) *http.Server {
 	mux.Handle("/api/", api.NewHandler(
 		strains.NewStore(client.Database("terpcatalog").Collection("strains")),
 		producers.NewStore(client.Database("terpcatalog").Collection("producers")),
+		orders.NewStore(client.Database("terpcatalog").Collection("orders")),
 	))
 
 	return &http.Server{
