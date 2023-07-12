@@ -48,35 +48,38 @@ func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	content, err := generateConfirmationTemplate(order)
-	if err != nil {
-		log.Error("error getting order email content", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+	// Don't send e-mails in development
+	if !config.IsDevelopment() {
+		content, err := generateConfirmationTemplate(order)
+		if err != nil {
+			log.Error("error getting order email content", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
-	err = h.sender.SendEmail([]types.EmailAddress{{
-		Name:  order.Information.Company,
-		Email: order.Information.Email,
-	}},
-		"TerpScout Order Confirmation", content)
-	if err != nil {
-		log.Error("error sending email content", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+		err = h.sender.SendEmail([]types.EmailAddress{{
+			Name:  order.Information.Company,
+			Email: order.Information.Email,
+		}},
+			"TerpScout Order Confirmation", content)
+		if err != nil {
+			log.Error("error sending email content", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
-	content, err = generateOrderTemplate(order)
-	if err != nil {
-		log.Error("error getting order email content", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
+		content, err = generateOrderTemplate(order)
+		if err != nil {
+			log.Error("error getting order email content", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
-	err = h.sender.SendEmail(config.EmailOrderList(), "TerpScout New Order", content)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		err = h.sender.SendEmail(config.EmailOrderList(), "TerpScout New Order", content)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 	}
 
 	w.WriteHeader(http.StatusCreated)
