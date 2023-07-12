@@ -68,7 +68,7 @@ axios.get('/api/strains')
               Add to Cart
             </button>
             <div v-else class="flex">
-              <select @change="(event: Event) => { if(!event.target) return; cart.set(strain.id, parseInt((<HTMLSelectElement>event.target).value)) }" 
+              <select v-model="cart.get(strain.id).quantity" 
                 class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-center">
                 <option v-for="num in 10" :key="num" :value="num">{{ num }}</option>
               </select>
