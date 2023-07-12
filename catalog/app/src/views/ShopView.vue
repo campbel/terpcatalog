@@ -28,23 +28,28 @@ axios.get('/api/strains')
 </script>
 
 <template>
+  <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700" aria-label="Global">
+    <div class="w-full flex justify-between">
+      <h2 class="text-3xl text-white">Terp Scout</h2>
+      <RouterLink :hidden="cart.count == 0" to="checkout" title="checkout"
+        class="text-sm antialiased border-2 bg-white border-slate-800 hover:border-slate-600 hover:text-white py-2 px-2 rounded-lg">
+            🛒 <span class="font-mono rounded-full text-white bg-sky-950 px-2 py-1">{{ cart.count }}</span>
+      </RouterLink>
+    </div>
+  </nav>
   <main>
     <!-- Your content -->
     <div class="bg-white m-auto">
-      <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 md:max-w-7xl lg:px-8">
-        <div class="flex justify-between items-center py-2 px-4 h-14 shadow border rounded-md ">
+      <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 md:max-w-5xl lg:px-8">
+        <div class="py-2 h-14 mb-6">
           <h2 class="text-2xl font-bold tracking-tight text-gray-900">Available Strains</h2>
-          <RouterLink v-if="cart.count > 0" to="checkout" title="checkout"
-            class="text-sm antialiased border-2 bg-white border-slate-400 hover:border-slate-600 hover:text-white py-2 px-2 rounded-lg">
-            🛒 <span class="font-mono rounded-full text-white bg-orange-500 px-2 py-1">{{ cart.count }}</span>
-          </RouterLink>
+          <p>All the strains ready to order.</p>
         </div>
         <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
 
           <!-- Strain -->
           <div v-for="strain in strains" :key="strain.id" class="group relative">
-            <div
-              class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
+            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
               <img :src="strain.images[0]" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
             </div>
             <div class="mt-2 flex justify-between items-start">
@@ -62,17 +67,19 @@ axios.get('/api/strains')
               </div>
             </div>
             <div class="mb-2 flex justify-between">
-              <p class="mt-1 text-sm text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap">{{ strain.genetics }}</p>
+              <p class="mt-1 text-sm text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap">{{ strain.genetics }}
+              </p>
             </div>
-            <button v-if="!cart.has(strain.id)" @click="cart.add(strain)" class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2 w-full">
+            <button v-if="!cart.has(strain.id)" @click="cart.add(strain)"
+              class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2 w-full">
               Add to Cart
             </button>
             <div v-else class="flex">
-              <select v-model="cart.get(strain.id).quantity" 
+              <select v-model="cart.get(strain.id).quantity"
                 class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-center">
                 <option v-for="num in 10" :key="num" :value="num">{{ num }}</option>
               </select>
-              <button @click="cart.del(strain.id)" 
+              <button @click="cart.del(strain.id)"
                 class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2">Remove</button>
             </div>
           </div>
