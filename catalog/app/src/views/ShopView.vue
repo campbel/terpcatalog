@@ -51,7 +51,7 @@ axios.get('/api/strains')
             All the strains ready to order.
           </p>
         </div>
-        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
 
           <!-- Strain -->
           <div v-for="strain in strains" :key="strain.id" class="group relative">
@@ -64,16 +64,20 @@ axios.get('/api/strains')
                   {{ strain.name }}
                   <span class="text-xs text-gray-400"> {{ strain.category }}</span>
                 </h3>
-                <p class="mt-1 text-sm text-gray-900">
-                  <span title="thc%">{{ strain.thc }}%</span> | <span title="terpenes%">{{ strain.terpenes }}%</span>
+                <p class="mt-2 text-sm text-gray-900">
+                  <span>{{ strain.thc }}% THC</span> <span>{{ strain.terpenes }}% Terpenes</span>
+                  <span>35% Total Cannabinoids</span> <span>0% CBD</span>
+                </p>
+                <p class="mt-2 text-xs text-gray-600">
+                  Terpene1, Terpene2, Terpene3
                 </p>
               </div>
               <div>
-                <p class="text-sm text-right font-medium text-gray-900">${{ strain.price }}</p>
+                <p class="text-sm text-right text-gray-900">${{ strain.price }}</p>
               </div>
             </div>
             <div class="mb-2 flex justify-between">
-              <p class="mt-1 text-sm text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap">{{ strain.genetics }}
+              <p class="mt-1 text-sm text-gray-900 text-ellipsis overflow-hidden whitespace-nowrap">{{ strain.genetics }}
               </p>
             </div>
             <button v-if="!cart.has(strain.id)" @click="cart.add(strain)"
