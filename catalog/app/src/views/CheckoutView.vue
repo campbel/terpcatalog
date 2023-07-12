@@ -49,7 +49,7 @@ function onSubmit() {
 
         <div class="mt-6 md:flex justify-between">
 
-          <div class="md:w-1/2 w-full pr-6 mb-6">
+          <div class="md:w-1/2 w-full mb-6">
             <form @submit.prevent="onSubmit">
               <div class="space-y-12">
 
@@ -149,7 +149,9 @@ function onSubmit() {
             </form>
           </div>
 
-          <div class="md:w-1/2 w-full pl-6 mb-6">
+          <div class="w-10" aria="spacer"></div>
+
+          <div class="md:w-1/2 w-full mb-6">
             <h2 class="text-base font-semibold leading-7 text-gray-900">Order Summary</h2>
 
             <div v-for="(item, index) in cart.items" class="border-b py-4">

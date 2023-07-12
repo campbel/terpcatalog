@@ -64,13 +64,27 @@ axios.get('/api/strains')
                   {{ strain.name }}
                   <span class="text-xs text-gray-400"> {{ strain.category }}</span>
                 </h3>
-                <p class="mt-2 text-sm text-gray-900">
-                  <span>{{ strain.thc }}% THC</span> <span>{{ strain.terpenes }}% Terpenes</span>
-                  <span>35% Total Cannabinoids</span> <span>0% CBD</span>
-                </p>
-                <p class="mt-2 text-xs text-gray-600">
+                <p class="mt-2 mb-2 text-xs text-gray-600">
                   Terpene1, Terpene2, Terpene3
                 </p>
+                <table class="text-sm mb-2">
+                  <tr>
+                    <td>{{ strain.thc }}%</td>
+                    <td>THC</td>
+                  </tr>
+                  <tr>
+                    <td>{{ strain.terpenes }}%</td>
+                    <td>Terpenes</td>
+                  </tr>
+                  <tr>
+                    <td>35%</td>
+                    <td>Total Cannabinoids</td>
+                  </tr>
+                  <tr>
+                    <td>0%</td>
+                    <td>CBD</td>
+                  </tr>
+                </table>
               </div>
               <div>
                 <p class="text-sm text-right text-gray-900">${{ strain.price }}</p>
