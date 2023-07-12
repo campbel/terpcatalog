@@ -41,7 +41,7 @@ axios.get('/api/strains')
   <main>
     <!-- Your content -->
     <div class="bg-white m-auto">
-      <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 md:max-w-7xl lg:px-8">
         <div class="flex justify-between items-center py-2 px-4 h-14 shadow border rounded-md ">
           <h2 class="text-2xl font-bold tracking-tight text-gray-900">Available Strains</h2>
           <RouterLink v-if="cart.count > 0" to="checkout" title="checkout"

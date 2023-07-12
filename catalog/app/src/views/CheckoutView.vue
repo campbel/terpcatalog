@@ -54,7 +54,7 @@ function onSubmit() {
   <main>
     <!-- Your content -->
     <div class="bg-white m-auto">
-      <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div class="mx-auto max-w-2xl px-4 py-8 sm:px-6 md:max-w-5xl lg:px-8">
         <div class="flex justify-between items-center py-2 px-4 h-14 shadow border rounded-md ">
           <h2 class="text-2xl font-bold tracking-tight text-gray-900">Checkout</h2>
 
@@ -70,8 +70,9 @@ function onSubmit() {
                   <h2 class="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
                   <p class="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
 
-                  <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                    <div class="sm:col-span-3">
+                  <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-6">
+
+                    <div class="md:col-span-3">
                       <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
                       <div class="mt-2">
                         <input type="text" name="first-name" id="first-name" autocomplete="given-name"
@@ -79,7 +80,7 @@ function onSubmit() {
                       </div>
                     </div>
 
-                    <div class="sm:col-span-3">
+                    <div class="md:col-span-3">
                       <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
                       <div class="mt-2">
                         <input type="text" name="last-name" id="last-name" autocomplete="family-name"
@@ -87,7 +88,7 @@ function onSubmit() {
                       </div>
                     </div>
 
-                    <div class="sm:col-span-3">
+                    <div class="md:col-span-3">
                       <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                       <div class="mt-2">
                         <input id="email" name="email" type="email" autocomplete="email"
@@ -95,7 +96,7 @@ function onSubmit() {
                       </div>
                     </div>
 
-                    <div class="sm:col-span-3">
+                    <div class="md:col-span-3">
                       <label for="phone" class="block text-sm font-medium leading-6 text-gray-900">Phone</label>
                       <div class="mt-2">
                         <input id="phone" name="phone" type="phone" autocomplete="phone"
@@ -112,7 +113,7 @@ function onSubmit() {
                       </div>
                     </div>
 
-                    <div class="sm:col-span-2 sm:col-start-1">
+                    <div class="md:col-span-2">
                       <label for="city" class="block text-sm font-medium leading-6 text-gray-900">City</label>
                       <div class="mt-2">
                         <input type="text" name="city" id="city" autocomplete="address-level2"
@@ -120,18 +121,16 @@ function onSubmit() {
                       </div>
                     </div>
 
-                    <div class="sm:col-span-2">
-                      <label for="region" class="block text-sm font-medium leading-6 text-gray-900">State /
-                        Province</label>
+                    <div class="md:col-span-2">
+                      <label for="region" class="block text-sm font-medium leading-6 text-gray-900">State</label>
                       <div class="mt-2">
                         <input type="text" name="region" id="region" autocomplete="address-level1"
                           class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                       </div>
                     </div>
 
-                    <div class="sm:col-span-2">
-                      <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP / Postal
-                        code</label>
+                    <div class="md:col-span-2">
+                      <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900">ZIP Code</label>
                       <div class="mt-2">
                         <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code"
                           class="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
