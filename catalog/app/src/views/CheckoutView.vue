@@ -1,53 +1,32 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
-import { useCartStore } from '../stores/cart';
+import { useCartStore } from '@/stores/cart';
 import { useRouter } from 'vue-router';
-
-import { Strain } from '../types/Strain';
-import { OrderItem, OrderInformation } from '../types/order';
+import { OrderItem, OrderInformation } from '@/types/order';
 
 const cart = useCartStore();
 const router = useRouter();
 
+console.log(cart.items.values());
 if (cart.count === 0) {
   router.push({ name: 'shop' });
 }
 
-const strains = ref<Map<string, Strain>>(new Map());
 const orders = ref<OrderItem[]>([]);
 const information = ref(new OrderInformation());
-
-axios.get('/api/strains')
-  .then((response) => {
-    strains.value = response.data.reduce((map: Map<string, Strain>, strain: Strain) => {
-      map.set(strain.id, strain);
-      return map;
-    }, new Map())
-    orders.value = cart.items.map((item) => {
-      return {
-        strain: strains.value.get(item.id) as Strain,
-        quantity: item.count
-      }
-    })
-  })
-  .catch((error) => {
-    console.log(error)
-  })
 
 function onSubmit() {
   axios.post('/api/orders', {
     information: information.value,
     items: orders.value,
-  }).then((response) => {
+  }).then(() => {
     cart.reset();
     router.push({ name: 'checkout-success' });
   }).catch((error) => {
       alert("error submitting order - " + error)
   })
-
 }
-
 </script>
 
 <template>
@@ -154,21 +133,21 @@ function onSubmit() {
           <div class="md:w-1/2 w-full pl-6 mb-6">
             <h2 class="text-base font-semibold leading-7 text-gray-900">Order Summary</h2>
 
-            <div v-for="(order, index) in orders" class="border-b py-4">
+            <div v-for="(item, index) in cart.items" class="border-b py-4">
               <div class="flex mb-3 items-end">
-                <img :src="order.strain.images[0]" class="mr-3 h-32 rounded-lg" />
+                <!-- <img :src="item.strain.images[0]" class="mr-3 h-32 rounded-lg" /> -->
                 <div>
-                  <h2>{{ order.strain.name }}<p class="text-xs">{{ order.strain.category }}</p>
+                  <h2>{{ item.strain.name }}<p class="text-xs">{{ item.strain.category }}</p>
                   </h2>
-                  <p>${{ order.strain.price }} x {{ order.quantity }} = ${{ order.quantity * order.strain.price }}</p>
+                  <p>${{ item.strain.price }} x {{ item.quantity }} = ${{ item.quantity * item.strain.price }}</p>
                 </div>
               </div>
               <div class="flex">
-                <select v-model="order.quantity"
+                <select v-model="item.quantity"
                   class="mr-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 text-center">
                   <option v-for="num in 10" :key="num" :value="num">{{ num }}</option>
                 </select>
-                <button @click="orders.splice(index, 1)" class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2">
+                <button @click="cart.del(item.strain.id)" class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2">
                   Remove</button>
               </div>
             </div>

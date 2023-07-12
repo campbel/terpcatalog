@@ -3,6 +3,11 @@ import { Strain } from './strain'
 export class OrderItem {
     strain: Strain = new Strain()
     quantity: number = 0
+
+    constructor(strain: Strain, quantity: number) {
+        this.strain = strain;
+        this.quantity = quantity;
+    }
 }
 
 export class OrderInformation {

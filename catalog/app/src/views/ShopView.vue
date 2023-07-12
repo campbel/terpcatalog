@@ -2,19 +2,9 @@
 import { ref } from 'vue';
 import axios from 'axios';
 import { useCartStore } from '../stores/cart';
+import { Strain } from '@/types/strain';
 
 const cart = useCartStore();
-
-class Strain {
-  id: string = '';
-  name: string = '';
-  category: string = '';
-  genetics: string = '';
-  thc: number = 0;
-  terpenes: number = 0;
-  price: number = 0;
-  images: string[] = [];
-}
 
 const strains = ref<Strain[]>([]);
 const producers = ref([]);
@@ -74,7 +64,7 @@ axios.get('/api/strains')
             <div class="mb-2 flex justify-between">
               <p class="mt-1 text-sm text-gray-500 text-ellipsis overflow-hidden whitespace-nowrap">{{ strain.genetics }}</p>
             </div>
-            <button v-if="!cart.has(strain.id)" @click="cart.add(strain.id)" class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2 w-full">
+            <button v-if="!cart.has(strain.id)" @click="cart.add(strain)" class="bg-gray-200 hover:bg-gray-400 rounded-md px-3 py-2 w-full">
               Add to Cart
             </button>
             <div v-else class="flex">
