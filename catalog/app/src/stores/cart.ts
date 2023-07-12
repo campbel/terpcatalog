@@ -9,7 +9,6 @@ export const useCartStore = defineStore('cart', () => {
   const items = computed(() : OrderItem[] => {
     let items: OrderItem[] = []
     for (let item of cart.value.values()) {
-      console.log(item)
       items.push(item)
     }
     return items

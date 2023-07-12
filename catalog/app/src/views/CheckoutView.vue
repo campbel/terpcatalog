@@ -8,7 +8,6 @@ import { OrderItem, OrderInformation } from '@/types/order';
 const cart = useCartStore();
 const router = useRouter();
 
-console.log(cart.items.values());
 if (cart.count === 0) {
   router.push({ name: 'shop' });
 }
