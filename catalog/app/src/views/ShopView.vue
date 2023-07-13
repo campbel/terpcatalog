@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import axios from 'axios';
-import { useCartStore } from '../stores/cart';
+import { useCartStore } from '@/stores/cart';
 import { Strain } from '@/types/strain';
 import { Producer } from '@/types/producer';
+import { ShoppingBagIcon } from '@heroicons/vue/24/outline'
 
 const cart = useCartStore();
 
@@ -34,12 +35,13 @@ axios.get('/api/producers')
 <template>
   <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700"
     aria-label="Global">
-    <div class="w-full flex h-10 justify-between">
+    <div class="w-full flex items-center justify-between">
       <h2 class="text-3xl text-white">TerpScout</h2>
-      <RouterLink :hidden="cart.count == 0" to="checkout" title="checkout"
-        class="text-sm antialiased border-2 bg-white border-slate-800 hover:border-slate-400 py-2 px-2 rounded-lg">
-        <span class="uppercase text-xs font-bold">Cart</span> <span
-          class="font-mono rounded-full text-white bg-sky-950 px-2 py-1">{{ cart.count }}</span>
+      <RouterLink :hidden="cart.count == 0" to="checkout"
+        class="flex items-center border bg-slate-900 border-slate-950 hover:border-slate-400 px-2 py-1 rounded-md">
+        <ShoppingBagIcon class="inline-block w-6 h-6 text-white" />
+        <div class="w-2"></div>
+        <div class="text-white">{{ cart.count }}</div>
       </RouterLink>
     </div>
   </nav>
