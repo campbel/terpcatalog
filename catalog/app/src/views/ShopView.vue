@@ -3,11 +3,12 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { useCartStore } from '../stores/cart';
 import { Strain } from '@/types/strain';
+import { Producer } from '@/types/producer';
 
 const cart = useCartStore();
 
 const strains = ref<Strain[]>([]);
-const producers = ref([]);
+const producers = ref<Map<string, Producer>>(new Map());
 
 axios.get('/api/strains')
   .then((response) => {
@@ -17,9 +18,12 @@ axios.get('/api/strains')
     console.log(error)
   })
 
-axios.get('/api/strains')
+axios.get('/api/producers')
   .then((response) => {
-    producers.value = response.data
+    producers.value = response.data.reduce((map: Map<string, Producer>, producer: Producer) => {
+      map.set(producer.id, producer);
+      return map;
+    }, new Map())
   })
   .catch((error) => {
     console.log(error)
@@ -87,6 +91,7 @@ axios.get('/api/strains')
                 </table>
               </div>
               <div>
+                <h2>{{ producers.get(strain.producer_id)?.name }}</h2>
                 <p class="text-sm text-right text-gray-900">${{ strain.price }}</p>
               </div>
             </div>
