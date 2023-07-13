@@ -69,7 +69,7 @@ axios.get('/api/producers')
                   <span class="text-xs text-gray-400"> {{ strain.category }}</span>
                 </h3>
                 <p class="mt-2 mb-2 text-xs text-gray-600">
-                  <span>{{ strain.terpene_list.join(", ") }}</span>
+                  <span>{{ strain.terpene_list?.join(", ") }}</span>
                 </p>
                 <table class="text-sm mb-2">
                   <tr>
