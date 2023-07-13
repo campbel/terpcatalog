@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { Strain } from '@/types/strain';
 
 const router = useRouter();
 
@@ -20,17 +21,7 @@ const producers = ref<Producer[]>([])
 loadProducers()
 
 const images: [] = []
-const newStrain = ref({
-  "producer_id": "",
-  "name": "",
-  "category": "",
-  "genetics": "",
-  "thc": 0,
-  "terpenes": 0,
-  "price": 0,
-  "harvest_date": "",
-  "images": new Array<string>(),
-})
+const newStrain = ref(new Strain())
 
 function loadProducers() {
   axios.get("/api/producers")
@@ -116,7 +107,7 @@ function removeImage(index: number) {
               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-name">
                 Name
               </label>
-              <input v-model="newStrain.name" id="grid-name" type="text" placeholder="Green Blaze" required
+              <input v-model="newStrain.name" id="grid-name" type="text" required
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
             </div>
 
@@ -171,13 +162,45 @@ function removeImage(index: number) {
             <!-- Terpenes -->
             <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
               <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-terpenes">
-                Terpenes (0-100)
+                Terpenes% (0-100)
               </label>
               <input v-model.number="newStrain.terpenes" id="grid-terpenes" type="number" placeholder="25.0" required
                 min="0" max="100"
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
             </div>
 
+            <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-cbd">
+                CBD% (0-100)
+              </label>
+              <input v-model.number="newStrain.cbd" id="grid-cbd" type="number" placeholder="25.0" required min="0"
+                max="100"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+            </div>
+
+            <div class="w-full md:w-1/2 px-3 mb-3 md:mb-0">
+              <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-total-cannabinoids">
+                Total Cannabinoids% (0-100)
+              </label>
+              <input v-model.number="newStrain.total_cannabinoids" id="grid-total-cannabinoids" type="number" placeholder="25.0" required
+                min="0" max="100"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+            </div>
+
+          </div>
+
+          <div>
+            <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-name">
+              Terpenes (Max 3)
+            </label>
+          </div>
+          <div class="flex flex-wrap -mx-3 mb-3">
+            <div v-for="(terpene, index) in newStrain.terpene_list" :key="index"
+              class="w-full md:w-1/3 px-3 mb-3 md:mb-0">
+              <input v-model="newStrain.terpene_list[index]" id="grid-name" type="text"
+                :placeholder="'Terpene ' + (index + 1)"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+            </div>
           </div>
 
           <!-- Row 4-->
@@ -217,7 +240,9 @@ function removeImage(index: number) {
 
             <!-- Image -->
             <div class="px-3 mb-3">
-              <label class="block  cursor-pointer bg-slate-400 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" for="grid-photo">
+              <label
+                class="block  cursor-pointer bg-slate-400 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                for="grid-photo">
                 Add Image
                 <input type="file" accept="image/jpeg;image/png" id="grid-photo" @change="uploadImage" />
               </label>
@@ -228,8 +253,9 @@ function removeImage(index: number) {
           <div class="flex flex-wrap -mx-3 mb-3">
 
             <div v-for="(image, index) in newStrain.images" class="px-3 mb-3">
-              <img :src="image" class="rounded shadow-md border-gray-200 max-h-48 border"/>
-              <button type="button" @click="removeImage(index)" class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
+              <img :src="image" class="rounded shadow-md border-gray-200 max-h-48 border" />
+              <button type="button" @click="removeImage(index)"
+                class="uppercase mt-2 text-xs text-gray-300 hover:text-gray-500">
                 Remove
               </button>
             </div>
@@ -262,5 +288,4 @@ function removeImage(index: number) {
 <style>
 input[type="file"] {
   display: none;
-}
-</style>
+}</style>

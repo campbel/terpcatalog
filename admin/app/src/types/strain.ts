@@ -9,6 +9,7 @@ export class Strain {
     total_cannabinoids: number = 0;
     cbd: number = 0;
     terpene_list: string[] = new Array<string>(3);
+    harvest_date: string = '';
     price: number = 0;
     images: string[] = [];
 }

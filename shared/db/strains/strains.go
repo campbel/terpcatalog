@@ -10,16 +10,19 @@ import (
 )
 
 type Strain struct {
-	ID          primitive.ObjectID `bson:"_id"`
-	ProducerID  primitive.ObjectID `bson:"producer_id"`
-	Name        string             `bson:"name"`
-	Category    string             `bson:"category"`
-	Genetics    string             `bson:"genetics"`
-	THC         float64            `bson:"thc"`
-	Terpenes    float64            `bson:"terpenes"`
-	Price       float64            `bson:"price"`
-	HarvestDate string             `bson:"harvest_date"`
-	Images      []string           `bson:"images"`
+	ID                primitive.ObjectID `bson:"_id"`
+	ProducerID        primitive.ObjectID `bson:"producer_id"`
+	Name              string             `bson:"name"`
+	Category          string             `bson:"category"`
+	Genetics          string             `bson:"genetics"`
+	THC               float64            `bson:"thc"`
+	Terpenes          float64            `bson:"terpenes"`
+	CBD               float64            `bson:"cbd"`
+	TotalCannabinoids float64            `bson:"total_cannabinoids"`
+	TerpeneList       []string           `bson:"terpene_list"`
+	Price             float64            `bson:"price"`
+	HarvestDate       string             `bson:"harvest_date"`
+	Images            []string           `bson:"images"`
 }
 
 type Store interface {
@@ -99,16 +102,19 @@ func (db *Collection) DeleteStrain(ctx context.Context, id string) error {
 
 func translateToCommon(strain Strain) types.Strain {
 	return types.Strain{
-		ID:          strain.ID.Hex(),
-		ProducerID:  strain.ProducerID.Hex(),
-		Name:        strain.Name,
-		Category:    strain.Category,
-		Genetics:    strain.Genetics,
-		THC:         strain.THC,
-		Terpenes:    strain.Terpenes,
-		Price:       strain.Price,
-		HarvestDate: strain.HarvestDate,
-		Images:      strain.Images,
+		ID:                strain.ID.Hex(),
+		ProducerID:        strain.ProducerID.Hex(),
+		Name:              strain.Name,
+		Category:          strain.Category,
+		Genetics:          strain.Genetics,
+		THC:               strain.THC,
+		Terpenes:          strain.Terpenes,
+		CBD:               strain.CBD,
+		TotalCannabinoids: strain.TotalCannabinoids,
+		TerpeneList:       strain.TerpeneList,
+		Price:             strain.Price,
+		HarvestDate:       strain.HarvestDate,
+		Images:            strain.Images,
 	}
 }
 
@@ -124,15 +130,18 @@ func translateFromCommon(strain types.Strain) Strain {
 	id, _ := primitive.ObjectIDFromHex(strain.ID)
 	pid, _ := primitive.ObjectIDFromHex(strain.ProducerID)
 	return Strain{
-		ID:          id,
-		ProducerID:  pid,
-		Name:        strain.Name,
-		Category:    strain.Category,
-		Genetics:    strain.Genetics,
-		THC:         strain.THC,
-		Terpenes:    strain.Terpenes,
-		Price:       strain.Price,
-		HarvestDate: strain.HarvestDate,
-		Images:      strain.Images,
+		ID:                id,
+		ProducerID:        pid,
+		Name:              strain.Name,
+		Category:          strain.Category,
+		Genetics:          strain.Genetics,
+		THC:               strain.THC,
+		Terpenes:          strain.Terpenes,
+		CBD:               strain.CBD,
+		TotalCannabinoids: strain.TotalCannabinoids,
+		TerpeneList:       strain.TerpeneList,
+		Price:             strain.Price,
+		HarvestDate:       strain.HarvestDate,
+		Images:            strain.Images,
 	}
 }

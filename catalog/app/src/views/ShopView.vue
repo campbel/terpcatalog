@@ -65,7 +65,7 @@ axios.get('/api/strains')
                   <span class="text-xs text-gray-400"> {{ strain.category }}</span>
                 </h3>
                 <p class="mt-2 mb-2 text-xs text-gray-600">
-                  Terpene1, Terpene2, Terpene3
+                  <span>{{ strain.terpene_list.join(", ") }}</span>
                 </p>
                 <table class="text-sm mb-2">
                   <tr>
@@ -77,11 +77,11 @@ axios.get('/api/strains')
                     <td>Terpenes</td>
                   </tr>
                   <tr>
-                    <td>35%</td>
+                    <td>{{ strain.total_cannabinoids }}%</td>
                     <td>Total Cannabinoids</td>
                   </tr>
                   <tr>
-                    <td>0%</td>
+                    <td>{{ strain.cbd }}%</td>
                     <td>CBD</td>
                   </tr>
                 </table>
