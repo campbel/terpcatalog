@@ -30,8 +30,8 @@ function onSubmit() {
 <template>
   <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700"
     aria-label="Global">
-    <div class="w-full flex  h-10 justify-between">
-      <h2 class="text-3xl text-white">TerpScout</h2>
+    <div class="w-full flex items-center justify-between">
+      <RouterLink to="/" class="text-4xl font-bold leading-tight text-gray-100">TerpScout</RouterLink>
     </div>
   </nav>
   <main>

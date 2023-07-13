@@ -36,7 +36,7 @@ axios.get('/api/producers')
   <nav class="mx-auto w-full bg-sky-950 items-center justify-between p-3 lg:px-8 border-b border-green-700"
     aria-label="Global">
     <div class="w-full flex items-center justify-between">
-      <h2 class="text-3xl text-white">TerpScout</h2>
+      <RouterLink to="/" class="text-4xl font-bold leading-tight text-gray-100">TerpScout</RouterLink>
       <RouterLink :hidden="cart.count == 0" to="checkout"
         class="flex items-center border bg-slate-900 border-slate-950 hover:border-slate-400 px-2 py-1 rounded-md">
         <ShoppingBagIcon class="inline-block w-6 h-6 text-white" />
