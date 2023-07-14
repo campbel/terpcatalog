@@ -65,7 +65,7 @@ func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := isValid(data); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	strain, err := h.store.CreateStrain(r.Context(), data)

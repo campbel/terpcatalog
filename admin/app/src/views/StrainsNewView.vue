@@ -20,7 +20,6 @@ class Producer {
 const producers = ref<Producer[]>([])
 loadProducers()
 
-const images: [] = []
 const newStrain = ref(new Strain())
 
 function loadProducers() {
@@ -45,7 +44,7 @@ function onSubmit() {
       router.push({ name: "strains" });
     })
     .catch((error) => {
-      console.log(error);
+      alert(error);
     });
 }
 
