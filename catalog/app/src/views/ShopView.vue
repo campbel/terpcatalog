@@ -94,7 +94,7 @@ axios.get('/api/producers')
                 </table>
               </div>
               <div>
-                <h2>{{ producers.get(strain.producer_id)?.name }}</h2>
+                <h2 class="text-right">{{ producers.get(strain.producer_id)?.name }}</h2>
                 <p class="text-sm text-right text-gray-900">${{ strain.price }}</p>
               </div>
             </div>
