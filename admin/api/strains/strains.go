@@ -7,6 +7,7 @@ import (
 
 	"github.com/campbel/terpcatalog/shared/db/strains"
 	"github.com/campbel/terpcatalog/shared/types"
+	"github.com/campbel/terpcatalog/util/log"
 )
 
 type Handler struct {
@@ -61,21 +62,25 @@ func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
 	var data types.Strain
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
+		log.Debug("error decoding strain data", "error", err.Error())
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 	if err := isValid(data); err != nil {
+		log.Debug("error in strain data", "error", err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	strain, err := h.store.CreateStrain(r.Context(), data)
 	if err != nil {
+		log.Debug("error creating strain in store", "error", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	w.WriteHeader(http.StatusCreated)
 	err = json.NewEncoder(w).Encode(strain)
 	if err != nil {
+		log.Debug("error encoding strain data", "error", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -94,16 +99,16 @@ func isValid(data types.Strain) error {
 	if data.Genetics == "" {
 		return errors.New("genetics is required")
 	}
-	if data.THC == 0 || data.THC > 100 {
+	if data.THC < 0 || data.THC > 100 {
 		return errors.New("thc must be between 0 and 100")
 	}
-	if data.CBD == 0 || data.CBD > 100 {
+	if data.CBD < 0 || data.CBD > 100 {
 		return errors.New("cbd must be between 0 and 100")
 	}
-	if data.Terpenes == 0 || data.Terpenes > 100 {
+	if data.Terpenes < 0 || data.Terpenes > 100 {
 		return errors.New("terpenes must be between 0 and 100")
 	}
-	if data.TotalCannabinoids == 0 || data.TotalCannabinoids > 100 {
+	if data.TotalCannabinoids < 0 || data.TotalCannabinoids > 100 {
 		return errors.New("total cannabinoids must be between 0 and 100")
 	}
 	for _, terp := range data.TerpeneList {
