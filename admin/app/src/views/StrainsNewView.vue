@@ -39,6 +39,7 @@ function loadProducers() {
 }
 
 function onSubmit() {
+  newStrain.value.terpene_list = newStrain.value.terpene_list.filter((terpene: string) => terpene.trim().length > 0);
   axios.post("/api/strains", newStrain.value)
     .then((response) => {
       router.push({ name: "strains" });

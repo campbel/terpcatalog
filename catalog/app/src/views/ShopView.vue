@@ -71,7 +71,8 @@ axios.get('/api/producers')
                   <span class="text-xs text-gray-400"> {{ strain.category }}</span>
                 </h3>
                 <p class="mt-2 mb-2 text-xs text-gray-600">
-                  <span>{{ strain.terpene_list?.join(", ") }}</span>
+                  <span v-if="strain.terpene_list && strain.terpene_list.length > 0">{{ strain.terpene_list?.join(", ") }}</span>
+                  <span v-else>No terpenes specified</span>
                 </p>
                 <table class="text-sm mb-2">
                   <tr>

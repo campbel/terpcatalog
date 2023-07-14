@@ -2,6 +2,7 @@ package strains
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/campbel/terpcatalog/shared/db/strains"
@@ -63,6 +64,10 @@ func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	if err := isValid(data); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	strain, err := h.store.CreateStrain(r.Context(), data)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -74,6 +79,50 @@ func (h *Handler) handlePost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+}
+
+func isValid(data types.Strain) error {
+	if data.ProducerID == "" {
+		return errors.New("producer id is required")
+	}
+	if data.Name == "" {
+		return errors.New("name is required")
+	}
+	if data.Category == "" {
+		return errors.New("category is required")
+	}
+	if data.Genetics == "" {
+		return errors.New("genetics is required")
+	}
+	if data.THC == 0 || data.THC > 100 {
+		return errors.New("thc must be between 0 and 100")
+	}
+	if data.CBD == 0 || data.CBD > 100 {
+		return errors.New("cbd must be between 0 and 100")
+	}
+	if data.Terpenes == 0 || data.Terpenes > 100 {
+		return errors.New("terpenes must be between 0 and 100")
+	}
+	if data.TotalCannabinoids == 0 || data.TotalCannabinoids > 100 {
+		return errors.New("total cannabinoids must be between 0 and 100")
+	}
+	for _, terp := range data.TerpeneList {
+		if terp == "" {
+			return errors.New("terpene list cannot contain empty strings")
+		}
+	}
+	if data.Price < 0 {
+		return errors.New("price cannot be negative")
+	}
+	if data.HarvestDate == "" {
+		return errors.New("harvest date is required")
+	}
+	for _, img := range data.Images {
+		if img == "" {
+			return errors.New("image list cannot contain empty strings")
+		}
+	}
+	return nil
 }
 
 func (h *Handler) handleDelete(w http.ResponseWriter, r *http.Request) {
