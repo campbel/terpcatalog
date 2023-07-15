@@ -68,7 +68,7 @@ axios.get('/api/producers')
           </p>
         </div>
 
-        <div v-for="([id, strains]) in strainsByProducer" :key="id">
+        <div class="mb-6" v-for="([id, strains]) in strainsByProducer" :key="id">
           <h2 class="text-lg font-bold uppercase">{{ producers.get(id)?.name }}</h2>
           <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
 
