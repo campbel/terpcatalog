@@ -10,10 +10,20 @@ const cart = useCartStore();
 
 const strains = ref<Strain[]>([]);
 const producers = ref<Map<string, Producer>>(new Map());
+const strainsByProducer = ref<Map<string, Strain[]>>(new Map());
 
-axios.get('/api/strains')
+axios.get<Strain[]>('/api/strains')
   .then((response) => {
-    strains.value = response.data
+    strains.value = response.data;
+    strainsByProducer.value = response.data.reduce((acc, strain) => {
+      let strainList = acc.get(strain.producer_id)
+      if (!strainList) {
+        strainList = new Array<Strain>();
+      }
+      strainList.push(strain);
+      acc.set(strain.producer_id, strainList);
+      return acc;
+    }, new Map<string, Strain[]>());
   })
   .catch((error) => {
     console.log(error)
@@ -57,68 +67,77 @@ axios.get('/api/producers')
             All the strains ready to order.
           </p>
         </div>
-        <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
 
-          <!-- Strain -->
-          <div v-for="strain in strains" :key="strain.id" class="group relative">
-            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
-              <img :src="strain.images[0]" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-            </div>
-            <div class="mt-2 flex justify-between items-start">
-              <div>
-                <h3 class="text-lg text-gray-700">
+        <div v-for="([id, strains]) in strainsByProducer" :key="id">
+          <h2 class="text-lg font-bold uppercase">{{ producers.get(id)?.name }}</h2>
+          <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+
+            <!-- Strain -->
+
+            <div v-for="strain in strains" :key="strain.id" class="group relative">
+              <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
+                <img :src="strain.images[0]" class="h-full w-full object-cover object-center lg:h-full lg:w-full">
+              </div>
+
+              <div class="mb-2">
+                <h3 class="mb-1 text-md font-bold text-gray-700">
                   {{ strain.name }}
-                  <span class="text-xs text-gray-400"> {{ strain.category }}</span>
+                  <span class="text-xs font-normal text-gray-400"> {{ strain.category }}</span>
                 </h3>
-                <p class="mt-2 mb-2 text-xs text-gray-600">
-                  <span v-if="strain.terpene_list && strain.terpene_list.length > 0">{{ strain.terpene_list?.join(", ") }}</span>
+                <p class="mb-2 text-xs text-gray-600">
+                  <span v-if="strain.terpene_list && strain.terpene_list.length > 0">{{ strain.terpene_list?.join(", ")
+                  }}</span>
                   <span v-else>No terpenes specified</span>
                 </p>
-                <table class="text-sm mb-2">
-                  <tr>
-                    <td>{{ strain.thc }}%</td>
-                    <td>THC</td>
-                  </tr>
-                  <tr>
-                    <td>{{ strain.terpenes }}%</td>
-                    <td>Terpenes</td>
-                  </tr>
-                  <tr>
-                    <td>{{ strain.total_cannabinoids }}%</td>
-                    <td>Total Cannabinoids</td>
-                  </tr>
-                  <tr>
-                    <td>{{ strain.cbd }}%</td>
-                    <td>CBD</td>
-                  </tr>
-                </table>
+                <p class="mb-1 text-xs text-gray-900">
+                  <span class="font-bold">THC:</span> {{ strain.thc }}%
+                  <span class="font-bold">CBD:</span> {{ strain.cbd }}%
+                  <span class="font-bold">Terpenes:</span> {{ strain.terpenes }}%
+                  <span class="font-bold" title="total cannabinoids">TC:</span> {{ strain.total_cannabinoids }}%
+                </p>
+                <p class="mb-1 text-sm text-gray-900">{{ strain.genetics }}</p>
+                <p class="mb-1 text-sm text-gray-900">${{ strain.price }}</p>
               </div>
-              <div>
-                <h2 class="text-right">{{ producers.get(strain.producer_id)?.name }}</h2>
-                <p class="text-sm text-right text-gray-900">${{ strain.price }}</p>
+              <!-- <p class="mb-2 text-xs text-gray-600">
+                    <span v-if="strain.terpene_list && strain.terpene_list.length > 0">{{ strain.terpene_list?.join(", ")
+                    }}</span>
+                    <span v-else>No terpenes specified</span>
+                  </p>
+                  <table class="text-sm mb-2">
+                    <tr>
+                      <td>{{ strain.thc }}%</td>
+                      <td>THC</td>
+                    </tr>
+                    <tr>
+                      <td>{{ strain.terpenes }}%</td>
+                      <td>Terpenes</td>
+                    </tr>
+                    <tr>
+                      <td>{{ strain.total_cannabinoids }}%</td>
+                      <td>Total Cannabinoids</td>
+                    </tr>
+                    <tr>
+                      <td>{{ strain.cbd }}%</td>
+                      <td>CBD</td>
+                    </tr>
+                  </table> -->
+
+              <button v-if="!cart.has(strain.id)" @click="cart.add(strain)"
+                class="bg-white border-gray-200 hover:bg-sky-950 hover:text-white hover:border-sky-950 border rounded-md px-3 py-2 w-full">
+                Add to Cart
+              </button>
+              <div v-else class="flex">
+                <select v-model="cart.get(strain.id).quantity"
+                  class="mr-4 bg-white border border-sky-950 text-gray-900 text-sm rounded-lg focus:ring-sky-950 focus:border-sky-950 block w-full p-2.5 text-center">
+                  <option v-for="num in 10" :key="num" :value="num">{{ num }}</option>
+                </select>
+                <button @click="cart.del(strain.id)"
+                  class="text-blue-400 hover:text-blue-600 rounded-md py-2 text-sm">clear</button>
               </div>
-            </div>
-            <div class="mb-2 flex justify-between">
-              <p class="mt-1 text-sm text-gray-900 text-ellipsis overflow-hidden whitespace-nowrap">{{ strain.genetics }}
-              </p>
-            </div>
-            <button v-if="!cart.has(strain.id)" @click="cart.add(strain)"
-              class="bg-white hover:bg-sky-950 hover:text-white border-sky-950 border rounded-md px-3 py-2 w-full">
-              Add to Cart
-            </button>
-            <div v-else class="flex">
-              <select v-model="cart.get(strain.id).quantity"
-                class="mr-4 bg-white border border-sky-950 text-gray-900 text-sm rounded-lg focus:ring-sky-950 focus:border-sky-950 block w-full p-2.5 text-center">
-                <option v-for="num in 10" :key="num" :value="num">{{ num }}</option>
-              </select>
-              <button @click="cart.del(strain.id)"
-                class="text-blue-400 hover:text-blue-600 rounded-md py-2 text-sm">clear</button>
             </div>
           </div>
-
         </div>
       </div>
     </div>
-
   </main>
 </template>
