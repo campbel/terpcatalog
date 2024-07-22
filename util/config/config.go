@@ -8,7 +8,7 @@ import (
 )
 
 func CatalogPort() string {
-	return getEnv("PORT", "8080")
+	return getEnv("CATALOG_PORT", "8080")
 }
 
 func AdminPort() string {
