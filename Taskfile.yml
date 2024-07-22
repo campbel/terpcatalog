@@ -6,45 +6,44 @@ tasks:
   default:
     cmds:
       - task -l
-  
-  setup:
-    desc: "Install dependencies"
-    internal: true
-    cmds:
-      - task: setup_go
-      - task: setup_air
 
-  setup_go:
-    desc: "Install go"
+  setup:
+    desc: "Setup the project"
+    cmds:
+      - brew install tmux
+      - brew install overmind
+
+  run:
+    desc: "Run the server and the applications"
+    deps:
+      - setup
+      - setup_mongo
+      - setup_server
+      - setup_admin
+      - setup_catalog
+    cmds:
+      - overmind start
+
+  setup_server:
+    desc: "Install air"
     internal: true
     cmds:
       - command -v go || brew install go
+      - command -v air || go install github.com/air-verse/air@latest
 
-  setup_air:
-    desc: "Install air"
-    internal: true
-    deps: 
-      - setup_go
-    cmds:
-      - command -v air || go install github.com/cosmtrek/air@latest
-
-  setup_admin_npm:
+  setup_admin:
     desc: "Install admin dependencies"
     internal: true
     dir: admin/app
     cmds:
       - npm install
 
-  setup_catalog_npm:
+  setup_catalog:
     desc: "Install catalog dependencies"
     internal: true
     dir: catalog/app
     cmds:
       - npm install
-
-  run:
-    desc: "Run the application"
-    deps: ["server", "admin", "catalog"]
 
   server:
     env:
@@ -52,14 +51,14 @@ tasks:
     desc: "Run the server"
     interactive: true
     deps:
-      - setup_air
+      - setup_server
     cmds:
       - air
 
   admin:
     desc: "Run the admin application"
     deps:
-      - setup_admin_npm
+      - setup_admin
     dir: admin/app
     cmds:
       - npm run dev
@@ -88,7 +87,7 @@ tasks:
   catalog:
     desc: "Run the catalog application"
     deps:
-      - setup_catalog_npm
+      - setup_catalog
     dir: catalog/app
     cmds:
       - npm run dev
@@ -113,3 +112,10 @@ tasks:
       - dist
     cmds:
       - npm run build
+
+  setup_mongo:
+    desc: "Setup the MongoDB"
+    status:
+      - docker ps | grep mongo
+    cmds:
+      - docker run --name mongo -p 27017:27017 -d mongo:7.0
