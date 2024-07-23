@@ -119,3 +119,9 @@ tasks:
       - docker ps | grep mongo
     cmds:
       - docker run --name mongo -p 27017:27017 -d mongo:7.0
+
+  docker_build:
+    desc: "Build the Docker image"
+    cmds:
+      - docker build -t registry.digitalocean.com/campbel/terpcatalog:latest .
+      - docker push registry.digitalocean.com/campbel/terpcatalog:latest
