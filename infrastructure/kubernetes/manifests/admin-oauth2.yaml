@@ -39,10 +39,6 @@ spec:
         ports:
         - containerPort: 4180
           protocol: TCP
-        resources:
-          limits:
-            cpu: "0.5"
-            memory: "512Mi"
 ---
 apiVersion: v1
 kind: Service

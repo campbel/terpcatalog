@@ -28,10 +28,3 @@ spec:
               value: "8001"
             - name: MONGO_CONNECTION_STRING
               value: "mongodb://mongodb:27017"
-          resources:
-            limits:
-              cpu: "1"
-              memory: "512Mi"
-            requests:
-              cpu: 200m
-              memory: "256Mi"
