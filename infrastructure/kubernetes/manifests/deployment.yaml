@@ -22,20 +22,12 @@ spec:
             - containerPort: 8000
             - containerPort: 8001
           env:
-            - name: PORT
+            - name: CATALOG_PORT
               value: "8000"
             - name: ADMIN_PORT
               value: "8001"
             - name: MONGO_CONNECTION_STRING
-              valueFrom:
-                secretKeyRef:
-                  name: mongodb
-                  key: connection_string
-            - name: EMAIL_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: email
-                  key: token
+              value: "mongodb://mongodb:27017"
           resources:
             limits:
               cpu: "1"
