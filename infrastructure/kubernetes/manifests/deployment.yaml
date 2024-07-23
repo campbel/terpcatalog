@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: terpcatalog
-          image: registry.digitalocean.com/campbel/terpcatalog:latest
+          image: ghcr.io/campbel/terpcatalog:main
           ports:
             - containerPort: 8000
             - containerPort: 8001
